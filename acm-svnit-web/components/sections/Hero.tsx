@@ -18,60 +18,70 @@ const item = {
 
 export default function Hero() {
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
-      {/* Animated grid background */}
+    <section className="relative min-h-screen flex items-center overflow-hidden">
+      {/* Dot pattern background */}
       <div className="hero-grid-bg absolute inset-0" />
-
-      {/* Radial gradient overlay */}
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(37,99,235,0.08)_0%,transparent_70%)]" />
 
       {/* Content */}
       <motion.div
         variants={container}
         initial="hidden"
         animate="show"
-        className="relative z-10 text-center px-4 max-w-4xl mx-auto"
+        className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-32 w-full"
       >
         {/* Eyebrow badge */}
         <motion.div variants={item} className="mb-8">
-          <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-border text-sm text-muted bg-surface/50">
-            <span className="w-2 h-2 rounded-full bg-primary animate-pulse" />
-            Association for Computing Machinery
+          <span className="pill-badge pill-badge--accent">
+            <span className="w-2 h-2 rounded-full bg-white animate-pulse" />
+            Level Up Your Tech Skills
           </span>
         </motion.div>
 
         {/* Main heading */}
         <motion.h1
           variants={item}
-          className="font-serif text-6xl sm:text-7xl md:text-8xl lg:text-9xl font-normal tracking-tight leading-[0.9] mb-6"
+          className="font-serif text-6xl sm:text-7xl md:text-8xl lg:text-[7rem] font-normal tracking-tight leading-[0.95] mb-6 max-w-4xl"
         >
-          <span className="text-shimmer">ACM SVNIT</span>
+          Welcome to{" "}
+          <span className="block">
+            <span className="text-shimmer">ACM SVNIT</span>
+          </span>
         </motion.h1>
 
         {/* Subheading */}
         <motion.p
           variants={item}
-          className="text-xl sm:text-2xl text-muted font-light max-w-xl mx-auto mb-10"
+          className="text-lg sm:text-xl text-muted max-w-xl mb-10 leading-relaxed"
         >
-          Where Curiosity Meets Code
+          At ACM SVNIT, we believe in building community through code. Discover
+          amazing events, workshops, hackathons, and connect with fellow tech
+          enthusiasts.
         </motion.p>
 
         {/* CTAs */}
         <motion.div
           variants={item}
-          className="flex flex-col sm:flex-row items-center justify-center gap-4"
+          className="flex flex-col sm:flex-row items-start gap-4"
         >
           <Button href="/events" size="lg">
-            Explore Events
+            Explore Events →
           </Button>
           <Button href="/team" variant="outline" size="lg">
             Meet The Team
           </Button>
         </motion.div>
-      </motion.div>
 
-      {/* Bottom fade */}
-      <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-background to-transparent" />
+        {/* Floating stat badge */}
+        <motion.div
+          variants={item}
+          className="absolute top-24 right-8 lg:right-16 hidden lg:flex"
+        >
+          <div className="w-28 h-28 rounded-full bg-accent border-2 border-foreground flex flex-col items-center justify-center text-white rotate-6 hover:rotate-0 transition-transform">
+            <span className="text-2xl font-black">850+</span>
+            <span className="text-[10px] font-bold uppercase tracking-wider">Members</span>
+          </div>
+        </motion.div>
+      </motion.div>
     </section>
   );
 }

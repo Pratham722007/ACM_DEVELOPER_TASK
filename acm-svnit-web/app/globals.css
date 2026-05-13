@@ -1,18 +1,20 @@
 @import url("https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap");
 @import "tailwindcss";
 
-/* ── Tailwind v4 Theme Tokens ──────────────────────────────── */
+/* ── Tailwind v4 Theme Tokens — Warm Playful Light ─────────── */
 @theme inline {
-  --color-background: #050510;
-  --color-foreground: #F8FAFC;
-  --color-primary: #2563EB;
-  --color-secondary: #0EA5E9;
-  --color-muted: #94A3B8;
-  --color-surface: #0D1117;
-  --color-border: rgba(255, 255, 255, 0.08);
-  --color-border-hover: rgba(255, 255, 255, 0.15);
+  --color-background: #FFF8F0;
+  --color-foreground: #1A1A1A;
+  --color-primary: #F5C518;
+  --color-secondary: #7C5CFC;
+  --color-accent: #10B981;
+  --color-muted: #6B7280;
+  --color-surface: #FFFFFF;
+  --color-border: #1A1A1A;
+  --color-border-light: #E5E5E5;
 
-  --font-sans: var(--font-geist-sans), "Inter", system-ui, sans-serif;
+  --font-sans: "Space Grotesk", var(--font-geist-sans), system-ui, sans-serif;
   --font-serif: "Instrument Serif", "Georgia", serif;
 }
 
@@ -37,8 +39,8 @@ body {
 }
 
 ::selection {
-  background: rgba(37, 99, 235, 0.3);
-  color: #F8FAFC;
+  background: rgba(124, 92, 252, 0.2);
+  color: #1A1A1A;
 }
 
 /* ── Scrollbar Styling ─────────────────────────────────────── */
@@ -46,55 +48,33 @@ body {
   width: 6px;
 }
 ::-webkit-scrollbar-track {
-  background: #050510;
+  background: #FFF8F0;
 }
 ::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.1);
+  background: #D1D5DB;
   border-radius: 999px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(255, 255, 255, 0.2);
+  background: #9CA3AF;
 }
 
-/* ── Animated CSS Grid Background ──────────────────────────── */
+/* ── Animated Dots Background ──────────────────────────────── */
 .hero-grid-bg {
   background-image:
-    repeating-linear-gradient(
-      0deg,
-      rgba(255, 255, 255, 0.03) 0px,
-      rgba(255, 255, 255, 0.03) 1px,
-      transparent 1px,
-      transparent 60px
-    ),
-    repeating-linear-gradient(
-      90deg,
-      rgba(255, 255, 255, 0.03) 0px,
-      rgba(255, 255, 255, 0.03) 1px,
-      transparent 1px,
-      transparent 60px
-    );
-  background-size: 60px 60px;
-  animation: gridMove 20s linear infinite;
+    radial-gradient(circle, #E5E0D8 1px, transparent 1px);
+  background-size: 32px 32px;
+  opacity: 0.6;
 }
 
-@keyframes gridMove {
-  0% {
-    background-position: 0 0, 0 0;
-  }
-  100% {
-    background-position: 60px 60px, 60px 60px;
-  }
-}
-
-/* ── Text Shimmer Animation ────────────────────────────────── */
+/* ── Text Shimmer — warm gold sweep ────────────────────────── */
 .text-shimmer {
   background: linear-gradient(
     90deg,
-    #F8FAFC 0%,
-    #2563EB 25%,
-    #0EA5E9 50%,
-    #2563EB 75%,
-    #F8FAFC 100%
+    #1A1A1A 0%,
+    #1A1A1A 40%,
+    #7C5CFC 50%,
+    #1A1A1A 60%,
+    #1A1A1A 100%
   );
   background-size: 400% 100%;
   -webkit-background-clip: text;
@@ -105,10 +85,10 @@ body {
 
 @keyframes shimmer {
   0%, 100% {
-    background-position: 0% 50%;
+    background-position: 100% 50%;
   }
   50% {
-    background-position: 100% 50%;
+    background-position: 0% 50%;
   }
 }
 
@@ -132,15 +112,15 @@ body {
   animation-play-state: paused;
 }
 
-/* ── Glassmorphism Navbar ──────────────────────────────────── */
+/* ── Warm Navbar ───────────────────────────────────────────── */
 .glass-nav {
-  background: rgba(5, 5, 16, 0.6);
+  background: rgba(255, 248, 240, 0.85);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
 }
 
 .glass-nav.scrolled {
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  border-bottom: 2px solid #1A1A1A;
 }
 
 /* ── Pulsing Dot (Live Now) ────────────────────────────────── */
@@ -172,22 +152,30 @@ body {
   }
 }
 
-/* ── Glow Effect ───────────────────────────────────────────── */
-.glow-blue {
-  box-shadow: 0 0 20px rgba(37, 99, 235, 0.15),
-    0 0 60px rgba(37, 99, 235, 0.05);
-}
-
-/* ── Card Hover Surface ────────────────────────────────────── */
+/* ── Card Surface — thick border style ─────────────────────── */
 .card-surface {
   background: var(--color-surface);
-  border: 1px solid var(--color-border);
-  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  border: 2px solid var(--color-border);
+  border-radius: 16px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .card-surface:hover {
-  border-color: var(--color-border-hover);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  box-shadow: 6px 6px 0px #1A1A1A;
+  transform: translate(-2px, -2px);
+}
+
+/* ── Card Surface Soft — light border ──────────────────────── */
+.card-surface-soft {
+  background: var(--color-surface);
+  border: 1.5px solid var(--color-border-light);
+  border-radius: 16px;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card-surface-soft:hover {
+  border-color: var(--color-border);
+  box-shadow: 4px 4px 0px #1A1A1A;
 }
 
 /* ── Timeline Line ─────────────────────────────────────────── */
@@ -196,8 +184,8 @@ body {
   left: 50%;
   top: 0;
   bottom: 0;
-  width: 2px;
-  background: linear-gradient(to bottom, transparent, rgba(37, 99, 235, 0.3), transparent);
+  width: 3px;
+  background: linear-gradient(to bottom, transparent, #1A1A1A, transparent);
   transform: translateX(-50%);
 }
 
@@ -209,7 +197,7 @@ body {
 
 /* ── Focus Styles ──────────────────────────────────────────── */
 :focus-visible {
-  outline: 2px solid var(--color-primary);
+  outline: 3px solid var(--color-secondary);
   outline-offset: 2px;
 }
 
@@ -220,10 +208,11 @@ body {
   right: 24px;
   z-index: 100;
   padding: 16px 24px;
-  border-radius: 12px;
-  background: var(--color-surface);
-  border: 1px solid rgba(16, 185, 129, 0.3);
-  color: #10B981;
+  border-radius: 999px;
+  background: var(--color-foreground);
+  border: 2px solid var(--color-foreground);
+  color: #FFFFFF;
+  font-weight: 600;
   animation: toastIn 0.3s ease-out, toastOut 0.3s ease-in 2.7s forwards;
 }
 
@@ -247,4 +236,46 @@ body {
     transform: translateY(20px);
     opacity: 0;
   }
+}
+
+/* ── Pill Badge Styles ─────────────────────────────────────── */
+.pill-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 16px;
+  border-radius: 999px;
+  border: 2px solid #1A1A1A;
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  background: #FFFFFF;
+  color: #1A1A1A;
+}
+
+.pill-badge--primary {
+  background: #F5C518;
+  border-color: #1A1A1A;
+}
+
+.pill-badge--accent {
+  background: #10B981;
+  border-color: #1A1A1A;
+  color: #FFFFFF;
+}
+
+.pill-badge--secondary {
+  background: #7C5CFC;
+  border-color: #1A1A1A;
+  color: #FFFFFF;
+}
+
+/* ── Decorative wavy divider ───────────────────────────────── */
+.wavy-divider {
+  width: 100%;
+  height: 24px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 24'%3E%3Cpath d='M0 12 Q150 0 300 12 Q450 24 600 12 Q750 0 900 12 Q1050 24 1200 12' stroke='%231A1A1A' stroke-width='2' fill='none'/%3E%3C/svg%3E");
+  background-repeat: repeat-x;
+  background-size: 600px 24px;
 }

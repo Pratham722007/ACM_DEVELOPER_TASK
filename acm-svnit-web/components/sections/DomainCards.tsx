@@ -33,11 +33,12 @@ export default function DomainCards() {
     >
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         {/* Section header */}
-        <div className="text-center mb-14">
-          <h2 className="font-serif text-4xl sm:text-5xl text-foreground mb-4">
-            Our Domains
+        <div className="mb-14">
+          <span className="pill-badge pill-badge--secondary mb-4 inline-flex">Our Domains</span>
+          <h2 className="font-serif text-5xl sm:text-6xl text-foreground mb-4 italic">
+            What We Build
           </h2>
-          <p className="text-muted text-lg max-w-2xl mx-auto">
+          <p className="text-muted text-lg max-w-2xl">
             Six specialized domains driving innovation and learning across the
             computing landscape.
           </p>
@@ -54,28 +55,23 @@ export default function DomainCards() {
                 transition={{ type: "spring", stiffness: 300, damping: 20 }}
               >
                 <Link href={`/domains`} className="block">
-                  <div
-                    className="card-surface rounded-xl p-6 h-full group"
-                    style={{
-                      ["--domain-color" as string]: domain.color,
-                    }}
-                  >
+                  <div className="card-surface p-6 h-full group">
                     {/* Icon */}
                     <div
-                      className="w-11 h-11 rounded-lg flex items-center justify-center mb-4 transition-colors"
+                      className="w-12 h-12 rounded-xl flex items-center justify-center mb-4 border-2 border-foreground"
                       style={{
-                        backgroundColor: `${domain.color}15`,
+                        backgroundColor: `${domain.color}20`,
                         color: domain.color,
                       }}
                     >
-                      <Icon size={22} />
+                      <Icon size={24} />
                     </div>
 
                     {/* Name & Count */}
-                    <h3 className="text-lg font-semibold text-foreground mb-1">
+                    <h3 className="text-xl font-bold text-foreground mb-1">
                       {domain.name}
                     </h3>
-                    <p className="text-xs text-muted mb-3">
+                    <p className="text-xs font-semibold text-muted uppercase tracking-wide mb-3">
                       {domain.memberCount} members
                     </p>
 
@@ -85,7 +81,7 @@ export default function DomainCards() {
                     </p>
 
                     {/* CTA */}
-                    <span className="inline-flex items-center gap-1.5 text-sm font-medium text-primary group-hover:gap-2.5 transition-all">
+                    <span className="inline-flex items-center gap-1.5 text-sm font-bold text-foreground group-hover:gap-2.5 transition-all uppercase tracking-wide">
                       Explore <ArrowRight size={14} />
                     </span>
                   </div>

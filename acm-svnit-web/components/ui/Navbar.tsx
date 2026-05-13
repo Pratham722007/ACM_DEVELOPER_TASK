@@ -26,7 +26,6 @@ export default function Navbar() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // Close mobile menu on route change
   useEffect(() => {
     setMobileOpen(false);
   }, [pathname]);
@@ -42,16 +41,16 @@ export default function Navbar() {
         <div className="flex h-16 items-center justify-between">
           {/* Logo */}
           <Link href="/" className="flex items-center gap-3 group">
-            <div className="relative flex h-9 w-9 items-center justify-center rounded-lg bg-primary/10 border border-primary/20 transition-colors group-hover:bg-primary/20">
-              <span className="text-sm font-bold text-primary">A</span>
+            <div className="relative flex h-10 w-10 items-center justify-center rounded-xl bg-foreground transition-transform group-hover:rotate-[-4deg]">
+              <span className="text-base font-black text-primary">A</span>
             </div>
-            <span className="text-lg font-semibold tracking-tight text-foreground">
-              ACM <span className="text-muted">SVNIT</span>
+            <span className="text-xl font-bold tracking-tight text-foreground">
+              ACM SVNIT
             </span>
           </Link>
 
-          {/* Desktop Nav */}
-          <div className="hidden md:flex items-center gap-1">
+          {/* Desktop Nav — pill-shaped container */}
+          <div className="hidden md:flex items-center gap-0.5 rounded-full border-2 border-foreground px-1.5 py-1">
             {navLinks.map((link) => {
               const isActive = pathname === link.href;
               return (
@@ -59,7 +58,7 @@ export default function Navbar() {
                   key={link.href}
                   href={link.href}
                   className={cn(
-                    "relative px-4 py-2 text-sm font-medium rounded-lg transition-colors",
+                    "relative px-4 py-1.5 text-sm font-semibold uppercase tracking-wide rounded-full transition-colors",
                     isActive
                       ? "text-foreground"
                       : "text-muted hover:text-foreground"
@@ -68,7 +67,7 @@ export default function Navbar() {
                   {isActive && (
                     <motion.div
                       layoutId="nav-active"
-                      className="absolute inset-0 rounded-lg bg-white/[0.06]"
+                      className="absolute inset-0 rounded-full bg-primary"
                       transition={{ type: "spring", stiffness: 380, damping: 30 }}
                     />
                   )}
@@ -82,16 +81,16 @@ export default function Navbar() {
           <div className="flex items-center gap-3">
             <Link
               href="/about#contact"
-              className="hidden sm:inline-flex items-center px-5 py-2 text-sm font-medium rounded-lg bg-primary text-white hover:bg-primary/90 transition-colors"
+              className="hidden sm:inline-flex items-center px-5 py-2 text-sm font-bold uppercase tracking-wide rounded-full bg-accent text-white border-2 border-foreground hover:shadow-[4px_4px_0px_#1A1A1A] hover:translate-x-[-2px] hover:translate-y-[-2px] transition-all"
             >
               Join Us
             </Link>
             <button
               onClick={() => setMobileOpen(!mobileOpen)}
-              className="md:hidden p-2 text-muted hover:text-foreground transition-colors"
+              className="md:hidden p-2 text-foreground hover:bg-foreground/5 rounded-xl transition-colors"
               aria-label="Toggle menu"
             >
-              {mobileOpen ? <X size={20} /> : <Menu size={20} />}
+              {mobileOpen ? <X size={22} /> : <Menu size={22} />}
             </button>
           </div>
         </div>
@@ -103,7 +102,7 @@ export default function Navbar() {
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: -10 }}
-          className="md:hidden border-t border-border bg-background/95 backdrop-blur-xl"
+          className="md:hidden border-t-2 border-foreground bg-background"
         >
           <div className="px-4 py-4 space-y-1">
             {navLinks.map((link) => {
@@ -113,10 +112,10 @@ export default function Navbar() {
                   key={link.href}
                   href={link.href}
                   className={cn(
-                    "block px-4 py-3 rounded-lg text-sm font-medium transition-colors",
+                    "block px-4 py-3 rounded-xl text-sm font-bold uppercase tracking-wide transition-colors",
                     isActive
-                      ? "bg-primary/10 text-primary"
-                      : "text-muted hover:text-foreground hover:bg-white/[0.04]"
+                      ? "bg-primary text-foreground"
+                      : "text-muted hover:text-foreground hover:bg-foreground/5"
                   )}
                 >
                   {link.label}
@@ -125,7 +124,7 @@ export default function Navbar() {
             })}
             <Link
               href="/about#contact"
-              className="block mt-2 px-4 py-3 text-center text-sm font-medium rounded-lg bg-primary text-white hover:bg-primary/90 transition-colors"
+              className="block mt-2 px-4 py-3 text-center text-sm font-bold uppercase tracking-wide rounded-full bg-accent text-white border-2 border-foreground transition-all"
             >
               Join Us
             </Link>

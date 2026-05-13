@@ -1,147 +1,83 @@
 import { Event } from "@/types";
 
 export const events: Event[] = [
-  // ── Upcoming Events (2026) ──────────────────────────────────
   {
-    id: "ev-upcoming-1",
-    title: "HackSVNIT 4.0",
+    id: "epiphany-14",
+    title: "Epiphany 14",
     description:
-      "The flagship 36-hour hackathon of ACM SVNIT is back with bigger prizes, more tracks, and industry mentors. Build, pitch, and win across AI, Web3, HealthTech, and Sustainability tracks.",
-    date: "2026-06-15T09:00:00+05:30",
-    venue: "SVNIT Auditorium & Labs",
-    category: "hackathon",
-    registrationLink: "https://hacksvnit.acmsvnit.org",
-  },
-  {
-    id: "ev-upcoming-2",
-    title: "Deep Dive into Transformers",
-    description:
-      "An intensive workshop on transformer architectures, attention mechanisms, and building your own GPT from scratch using PyTorch.",
-    date: "2026-05-28T14:00:00+05:30",
-    venue: "CS Seminar Hall, SVNIT",
-    category: "workshop",
-    registrationLink: "https://acmsvnit.org/workshops/transformers",
-  },
-  {
-    id: "ev-upcoming-3",
-    title: "CodeStorm — Monthly CP Contest",
-    description:
-      "Compete in our monthly competitive programming contest with problems ranging from Div3 to Div1 difficulty. Top performers earn ACM merit certificates.",
-    date: "2026-06-01T18:00:00+05:30",
-    venue: "Online — Codeforces",
+      "Epiphany is a National level competitive programming contest conducted at least once every year by ACM NIT Surat. This contest involves a 2-3 hour long contest where the problems are carefully curated by the problem setters in our core team — and hence are unique, interesting problems in their own right. Solutions are later sent and winners are awarded with monetary rewards.",
+    date: "2025-04-11T09:00:00+05:30",
+    venue: "Online — ACM NIT Surat",
     category: "competition",
-    registrationLink: "https://codeforces.com/acmsvnit",
-  },
-
-  // ── 2025 Events ─────────────────────────────────────────────
-  {
-    id: "ev-2025-1",
-    title: "ACM Orientation 2025",
-    description:
-      "Welcome freshers to the ACM family! An introduction to all six domains, past achievements, and how to get involved in the chapter.",
-    date: "2025-08-20T10:00:00+05:30",
-    venue: "SVNIT Auditorium",
-    category: "talk",
+    registrationLink: "https://www.instagram.com/p/DJ4ap4RJum7/",
   },
   {
-    id: "ev-2025-2",
-    title: "HackSVNIT 3.0",
+    id: "codewars-2025",
+    title: "CodeWars",
     description:
-      "Third edition of our annual hackathon with 500+ participants from across India. Tracks included FinTech, EdTech, and GreenTech.",
-    date: "2025-03-10T09:00:00+05:30",
+      "CodeWars is a programming contest held by ACM in association with MINDBEND, one of the biggest technical events in Gujarat. The contest is divided into two rounds — the preliminary round (2 hours) and the final round (3 hours). Open to all students, it is a great opportunity to test programming skills.",
+    date: "2025-04-07T09:00:00+05:30",
+    venue: "SVNIT Campus — MINDBEND",
+    category: "competition",
+    registrationLink: "https://www.instagram.com/p/DHORtnrtGzp/",
+  },
+  {
+    id: "dotslash-8",
+    title: "DotSlash 8.0",
+    description:
+      "The flagship event of ACM NIT Surat, DotSlash, is a 26-hour national-level Hackathon organized annually in association with Research Park at SVNIT, Surat. One of the biggest Hackathons in Gujarat, where teams from all over India register; 40 are selected to compete offline. Mentors guide students throughout, and top three winning teams receive benefits and monetary rewards.",
+    date: "2025-02-01T09:00:00+05:30",
+    venue: "SVNIT Research Park, Surat",
+    category: "hackathon",
+    registrationLink: "https://www.instagram.com/p/DDhGU2yh1HT/",
+  },
+  {
+    id: "hour-of-code-2025",
+    title: "Hour of Code",
+    description:
+      "During January 2025, the NIT Surat ACM Student Chapter celebrated Computer Science Week by conducting the Hour of Code event, wherein ACM executives visited five schools over Surat and Vadodara and collectively educated over 500 school students from grades 8–10 with talks covering the importance of CS, HTML/CSS basics, and future opportunities. Received a special mention for one of the best regional student chapters!",
+    date: "2025-01-15T10:00:00+05:30",
+    venue: "Schools across Surat & Vadodara",
+    category: "workshop",
+    registrationLink: "https://www.instagram.com/p/DFUQiLKN2jT/?img_index=1",
+  },
+  {
+    id: "inception-9",
+    title: "Inception 9.0",
+    description:
+      "The 9th iteration of ACM NIT Surat's college-level competitive programming contest. The contest took place in the CCC labs where students formed groups of 2-3 to solve programming questions set by ACM problem setters. Both second and third year students participated, with prize money of INR 5000 distributed among the top three teams.",
+    date: "2024-09-14T14:00:00+05:30",
+    venue: "Central Computer Center (CCC), SVNIT",
+    category: "competition",
+  },
+  {
+    id: "sih-2024-ideathon",
+    title: "SIH 2023 Stage 1: Ideathon",
+    description:
+      "Smart India Hackathon is a national level Hackathon facilitated by the Government of India. ACM NIT Surat, in collaboration with DSC NIT Surat, conducted a faculty mentorship session to help filter the top-30 teams from SVNIT, where participants presented their ideas to a panel of faculty members who graded them and gave critiques.",
+    date: "2024-09-16T10:00:00+05:30",
     venue: "SVNIT Campus",
     category: "hackathon",
+    registrationLink: "https://www.instagram.com/acmnitsurat/p/DDhFNxsMV8C/",
   },
   {
-    id: "ev-2025-3",
-    title: "Intro to Rust Programming",
+    id: "open-source-workshop-2024",
+    title: "Open Source Workshop",
     description:
-      "Hands-on workshop covering Rust fundamentals — ownership, borrowing, lifetimes — and building a CLI tool from scratch.",
-    date: "2025-02-15T14:00:00+05:30",
-    venue: "CS Lab 3, SVNIT",
+      "ACM NIT Surat hosted a highly informative workshop on Git/GitHub and open-source contributions, drawing nearly 70 attendees from second year students. The workshop spanned two hours and covered Git commands, understanding GitHub mechanics, and the significance of Hacktoberfest in the open-source community.",
+    date: "2024-09-06T14:00:00+05:30",
+    venue: "Old CSE Dept Classroom, SVNIT",
     category: "workshop",
+    registrationLink: "https://www.instagram.com/p/C_qAwTTtOTK/?img_index=1",
   },
   {
-    id: "ev-2025-4",
-    title: "CTF Championship 2025",
+    id: "summer-challenge-2024",
+    title: "ACM Summer Challenge",
     description:
-      "Capture The Flag cybersecurity competition with challenges in reverse engineering, cryptography, web exploitation, and forensics.",
-    date: "2025-04-05T09:00:00+05:30",
+      "A unique endeavor by ACM NIT Surat to teach young CS enthusiasts the fundamentals of data structures, algorithms and programming over a 30-day period. No prior experience expected. Problem setters hand-pick, curate, and create problems tailored to students' progress every week, incrementing difficulty each week for a complete understanding of CP topics.",
+    date: "2024-07-10T10:00:00+05:30",
     venue: "Online",
-    category: "competition",
-  },
-  {
-    id: "ev-2025-5",
-    title: "Tech Talk: Building at Scale",
-    description:
-      "Industry talk by a senior engineer from Google on distributed systems, microservices architecture, and handling millions of requests per second.",
-    date: "2025-01-18T16:00:00+05:30",
-    venue: "SVNIT Auditorium",
-    category: "talk",
-  },
-
-  // ── 2024 Events ─────────────────────────────────────────────
-  {
-    id: "ev-2024-1",
-    title: "HackSVNIT 2.0",
-    description:
-      "Our second annual hackathon with 300+ participants. Winning teams received internship offers from sponsor companies.",
-    date: "2024-03-15T09:00:00+05:30",
-    venue: "SVNIT Auditorium & Labs",
-    category: "hackathon",
-  },
-  {
-    id: "ev-2024-2",
-    title: "Full-Stack Web Dev Bootcamp",
-    description:
-      "A 3-day intensive bootcamp covering React, Node.js, PostgreSQL, and deployment with Docker. Participants built and shipped a complete project.",
-    date: "2024-09-10T10:00:00+05:30",
-    venue: "CS Lab 1 & 2, SVNIT",
     category: "workshop",
-  },
-  {
-    id: "ev-2024-3",
-    title: "ML Paper Reading Group Kickoff",
-    description:
-      "Launch of the weekly ML paper reading group. First paper: 'Attention Is All You Need' by Vaswani et al.",
-    date: "2024-07-20T17:00:00+05:30",
-    venue: "CS Seminar Hall",
-    category: "talk",
-  },
-  {
-    id: "ev-2024-4",
-    title: "ICPC Prep Camp",
-    description:
-      "Intensive competitive programming camp focused on ICPC preparation. Covered advanced graph theory, segment trees, and DP optimization.",
-    date: "2024-11-01T09:00:00+05:30",
-    venue: "CS Lab 3, SVNIT",
-    category: "workshop",
-  },
-  {
-    id: "ev-2024-5",
-    title: "Open Source Hacktoberfest Meetup",
-    description:
-      "In-person meetup for Hacktoberfest. Guided contributions to major open-source projects including Next.js, TensorFlow, and VS Code.",
-    date: "2024-10-12T14:00:00+05:30",
-    venue: "SVNIT Library Conference Room",
-    category: "workshop",
-  },
-  {
-    id: "ev-2024-6",
-    title: "UI/UX Design Sprint",
-    description:
-      "A weekend design sprint where teams redesigned the SVNIT student portal. Winner's design was submitted to the administration.",
-    date: "2024-08-25T10:00:00+05:30",
-    venue: "Architecture Drawing Hall, SVNIT",
-    category: "competition",
-  },
-  {
-    id: "ev-2024-7",
-    title: "Tech Talk: Career in Open Source",
-    description:
-      "Talk by a Mozilla contributor on building a career through open-source contributions, GSoC, and maintainership.",
-    date: "2024-06-10T16:00:00+05:30",
-    venue: "SVNIT Auditorium",
-    category: "talk",
+    registrationLink: "https://www.instagram.com/p/C9AKiBKNQAu/",
   },
 ];

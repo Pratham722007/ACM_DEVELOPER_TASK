@@ -7,21 +7,26 @@ import { teamMembers, yearHighlights } from "@/data/team";
 import TeamCard from "@/components/sections/TeamCard";
 import Badge from "@/components/ui/Badge";
 
-const years = [2020, 2021, 2022, 2023, 2024, 2025];
-const latestYear = 2025;
+// Get unique years from team data and sort them ascending
+const allYears = Array.from(new Set(teamMembers.map((m) => m.year))).sort(
+  (a, b) => a - b
+);
 
 const roleOrder = [
-  "President",
-  "Vice President",
-  "Developer Lead",
-  "Designer Lead",
-  "ML Lead",
-  "CP Lead",
+  "Chairperson",
+  "Vice-Chairperson",
   "Secretary",
+  "Treasurer",
+  "Developer",
+  "Designer",
+  "Problem Setter",
+  "Editor",
+  "Community Head",
   "Core Member",
 ];
 
 export default function TeamPageContent() {
+  const latestYear = allYears[allYears.length - 1];
   const [selectedYear, setSelectedYear] = useState(latestYear);
 
   const filteredMembers = useMemo(() => {
@@ -34,14 +39,23 @@ export default function TeamPageContent() {
   const totalMembers = teamMembers.length;
   const highlights = yearHighlights[selectedYear] || [];
 
-  // Separate leads and core members
   const leads = filteredMembers.filter(
     (m) =>
-      m.role === "President" ||
-      m.role === "Vice President" ||
-      m.role.includes("Lead") ||
-      m.role === "Secretary"
+      m.role === "Chairperson" ||
+      m.role === "Vice-Chairperson" ||
+      m.role === "Secretary" ||
+      m.role === "Treasurer" ||
+      m.role === "Community Head"
   );
+  
+  const specialized = filteredMembers.filter(
+    (m) =>
+      m.role === "Developer" ||
+      m.role === "Designer" ||
+      m.role === "Problem Setter" ||
+      m.role === "Editor"
+  );
+
   const coreMembers = filteredMembers.filter(
     (m) => m.role === "Core Member"
   );
@@ -56,16 +70,16 @@ export default function TeamPageContent() {
           transition={{ duration: 0.5 }}
           className="mb-10"
         >
-          <h1 className="font-serif text-5xl sm:text-6xl text-foreground mb-2">
-            Our Team
+          <span className="pill-badge pill-badge--accent mb-4 inline-flex">Our People</span>
+          <h1 className="font-serif text-6xl sm:text-7xl text-foreground italic mb-2">
+            The Team
           </h1>
           <p className="text-muted text-lg">
-            The people who make ACM SVNIT what it is — past, present, and
-            future.
+            The people who make ACM SVNIT what it is — past, present, and future.
           </p>
         </motion.div>
 
-        {/* Year Timeline */}
+        {/* Year Timeline — pill buttons */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -73,16 +87,16 @@ export default function TeamPageContent() {
           className="mb-8"
         >
           <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-none">
-            {years.map((year) => (
+            {allYears.map((year) => (
               <button
                 key={year}
                 onClick={() => setSelectedYear(year)}
-                className="relative px-5 py-2.5 text-sm font-medium rounded-lg whitespace-nowrap transition-colors flex items-center gap-2"
+                className="relative px-5 py-2.5 text-sm font-bold rounded-full whitespace-nowrap transition-all border-2 border-foreground flex items-center gap-2"
               >
                 {selectedYear === year && (
                   <motion.div
                     layoutId="year-bg"
-                    className="absolute inset-0 rounded-lg bg-primary"
+                    className="absolute inset-0 rounded-full bg-primary border-2 border-foreground"
                     transition={{
                       type: "spring",
                       stiffness: 380,
@@ -93,7 +107,7 @@ export default function TeamPageContent() {
                 <span
                   className={`relative z-10 ${
                     selectedYear === year
-                      ? "text-white"
+                      ? "text-foreground"
                       : "text-muted hover:text-foreground"
                   }`}
                 >
@@ -102,8 +116,8 @@ export default function TeamPageContent() {
                 {year === latestYear && (
                   <span className="relative z-10">
                     <Badge
-                      variant={selectedYear === year ? "default" : "primary"}
-                      className="text-[10px] py-0 px-1.5"
+                      variant="success"
+                      className="text-[9px] py-0 px-1.5"
                     >
                       Current
                     </Badge>
@@ -119,27 +133,27 @@ export default function TeamPageContent() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.15 }}
-          className="card-surface rounded-xl p-4 mb-8 flex flex-wrap items-center gap-4 justify-between"
+          className="card-surface p-5 mb-8 flex flex-wrap items-center gap-4 justify-between"
         >
           <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-lg bg-primary/10 flex items-center justify-center">
-              <Users size={18} className="text-primary" />
+            <div className="w-10 h-10 rounded-full bg-primary border-2 border-foreground flex items-center justify-center">
+              <Users size={18} className="text-foreground" />
             </div>
             <div>
-              <p className="text-sm font-medium text-foreground">
+              <p className="text-sm font-bold text-foreground">
                 Total members across all years
               </p>
-              <p className="text-xs text-muted">
-                {totalMembers} members · {years.length} years of legacy
+              <p className="text-xs font-semibold text-muted uppercase tracking-wide">
+                {totalMembers} members · {allYears.length} years of legacy
               </p>
             </div>
           </div>
-          <div className="text-2xl font-bold text-primary tabular-nums">
+          <div className="text-3xl font-black text-foreground tabular-nums">
             {totalMembers}+
           </div>
         </motion.div>
 
-        {/* Year Highlights (Alumni toggle) */}
+        {/* Year Highlights */}
         <AnimatePresence mode="wait">
           {highlights.length > 0 && (
             <motion.div
@@ -150,10 +164,10 @@ export default function TeamPageContent() {
               transition={{ duration: 0.3 }}
               className="overflow-hidden mb-8"
             >
-              <div className="card-surface rounded-xl p-5">
+              <div className="card-surface p-5">
                 <div className="flex items-center gap-2 mb-3">
-                  <Award size={16} className="text-primary" />
-                  <h3 className="text-sm font-semibold text-foreground">
+                  <Award size={16} className="text-secondary" />
+                  <h3 className="text-sm font-bold text-foreground uppercase tracking-wide">
                     {selectedYear === latestYear
                       ? "This year's highlights"
                       : `What the ${selectedYear} team built`}
@@ -167,7 +181,7 @@ export default function TeamPageContent() {
                     >
                       <ChevronRight
                         size={14}
-                        className="text-primary mt-0.5 shrink-0"
+                        className="text-secondary mt-0.5 shrink-0"
                       />
                       {h}
                     </li>
@@ -185,20 +199,16 @@ export default function TeamPageContent() {
           transition={{ duration: 0.5, delay: 0.2 }}
           className="mb-8"
         >
-          <div className="flex items-center gap-2 flex-wrap text-xs text-muted">
-            <span className="px-2.5 py-1 rounded-full bg-primary/10 text-primary font-medium">
-              President
+          <div className="flex items-center gap-2 flex-wrap text-xs">
+            <span className="pill-badge pill-badge--primary py-1">
+              Leadership
             </span>
-            <ChevronRight size={12} />
-            <span className="px-2.5 py-1 rounded-full bg-emerald-500/10 text-emerald-400 font-medium">
-              Vice President
+            <ChevronRight size={14} className="text-foreground" />
+            <span className="pill-badge py-1" style={{ background: "#FCD34D" }}>
+              Domain Experts
             </span>
-            <ChevronRight size={12} />
-            <span className="px-2.5 py-1 rounded-full bg-amber-500/10 text-amber-400 font-medium">
-              Domain Leads
-            </span>
-            <ChevronRight size={12} />
-            <span className="px-2.5 py-1 rounded-full bg-white/[0.06] text-muted font-medium">
+            <ChevronRight size={14} className="text-foreground" />
+            <span className="pill-badge py-1">
               Core Members
             </span>
           </div>
@@ -216,7 +226,7 @@ export default function TeamPageContent() {
             {/* Leadership */}
             {leads.length > 0 && (
               <div className="mb-6">
-                <h3 className="text-xs font-semibold uppercase tracking-wider text-muted mb-4">
+                <h3 className="text-xs font-bold uppercase tracking-widest text-muted mb-4">
                   Leadership
                 </h3>
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
@@ -227,10 +237,28 @@ export default function TeamPageContent() {
               </div>
             )}
 
+            {/* Specialized Roles (Dev, Design, etc) */}
+            {specialized.length > 0 && (
+              <div className="mb-6">
+                <h3 className="text-xs font-bold uppercase tracking-widest text-muted mb-4">
+                  Domain Experts
+                </h3>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+                  {specialized.map((member, i) => (
+                    <TeamCard
+                      key={member.id}
+                      member={member}
+                      index={i + leads.length}
+                    />
+                  ))}
+                </div>
+              </div>
+            )}
+
             {/* Core Members */}
             {coreMembers.length > 0 && (
               <div>
-                <h3 className="text-xs font-semibold uppercase tracking-wider text-muted mb-4">
+                <h3 className="text-xs font-bold uppercase tracking-widest text-muted mb-4">
                   Core Members
                 </h3>
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
@@ -238,7 +266,7 @@ export default function TeamPageContent() {
                     <TeamCard
                       key={member.id}
                       member={member}
-                      index={i + leads.length}
+                      index={i + leads.length + specialized.length}
                     />
                   ))}
                 </div>

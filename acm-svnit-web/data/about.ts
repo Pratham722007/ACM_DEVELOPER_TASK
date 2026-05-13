@@ -2,74 +2,62 @@ import { Milestone } from "@/types";
 
 export const milestones: Milestone[] = [
   {
-    year: 2013,
+    year: 2011,
     title: "Chapter Founded",
     description:
-      "ACM SVNIT was officially established as a student chapter of the Association for Computing Machinery, starting with 20 founding members.",
+      "ACM SVNIT was officially established as a student chapter of the Association for Computing Machinery, starting with a founding team of 8 passionate members.",
   },
   {
     year: 2014,
-    title: "First Workshop Series",
+    title: "Expanding Horizons",
     description:
-      "Launched our inaugural workshop series covering Git, Linux fundamentals, and Python programming. Attendance exceeded 100 students.",
-  },
-  {
-    year: 2016,
-    title: "ICPC Participation Begins",
-    description:
-      "ACM SVNIT teams first participated in the ICPC Asia Regionals, marking the beginning of our competitive programming legacy.",
+      "The core team structured into dedicated roles, adding Editors and Web Developers. Began establishing a strong foundation in competitive programming.",
   },
   {
     year: 2018,
-    title: "500 Member Milestone",
+    title: "DotSlash Hackathon Inaugurated",
     description:
-      "Crossed 500 cumulative members. Expanded from 3 domains to 5, adding Cybersecurity and UI/UX Design.",
+      "Launched the first edition of DotSlash, our flagship national-level hackathon. It has since grown to become one of the biggest hackathons in Gujarat.",
   },
   {
     year: 2020,
     title: "Digital Transformation",
     description:
-      "Pivoted to fully virtual events during the pandemic. Hosted online hackathons, webinars, and coding contests reaching participants nationwide.",
-  },
-  {
-    year: 2022,
-    title: "HackSVNIT 1.0 Launched",
-    description:
-      "Organized the first edition of HackSVNIT, our flagship hackathon with 200+ participants and partnerships with 10+ tech companies.",
+      "Successfully pivoted to fully virtual events during the pandemic. Maintained community engagement with online CP contests, hackathons, and webinars.",
   },
   {
     year: 2023,
-    title: "ACM India Recognition",
+    title: "Website Revamp & Open Source",
     description:
-      "Recognized by ACM India as one of the top 5 student chapters for outstanding contributions to computing education and community building.",
+      "The official ACM NIT Surat website was completely revamped by the core team. Open source contributions soared, marked by the release of ButterFlask-UI.",
   },
   {
     year: 2024,
-    title: "Best Project Award at HackNITR",
+    title: "Summer Challenge Launched",
     description:
-      "ACM SVNIT team won the Best Project Award at HackNITR. Three teams qualified for ICPC Regionals.",
+      "Initiated the ACM Summer Challenge, a highly successful 30-day competitive programming bootcamp tailored for beginners, alongside major open-source workshops.",
   },
   {
     year: 2025,
-    title: "850+ Members Strong",
+    title: "Hour of Code Recognition",
     description:
-      "Grew to 850+ members across 6 domains. Launched Open Source domain and began work on the Alumni Network Platform.",
+      "Educated over 500 school students during Computer Science Week. ACM NIT Surat received a special mention as one of the best regional student chapters.",
   },
 ];
 
 export const facultyAdvisors = [
   {
-    name: "Dr. Sanjay M. Shah",
+    name: "Dr. Dipti P. Rana",
     title: "Faculty Advisor",
     department: "Computer Science & Engineering",
     description:
-      "Professor of Computer Science with 20+ years of academic and research experience. Guides the chapter's academic initiatives and industry partnerships.",
+      "Professor in the Computer Science and Engineering Department. She has been a guiding force for the chapter, providing valuable insights and supporting our technical endeavors and events.",
   },
   {
-    name: "Dr. Priya K. Desai",
+    name: "Dr. Bhavesh N. Gohil",
     title: "Co-Advisor",
-    department: "Information Technology",
+    department: "Computer Science & Engineering",
     description:
-      "Associate Professor specializing in AI/ML. Mentors the Machine Learning domain and supports research paper reading groups.",
-  },
+      "Associate Professor in the CSE Department. With profound expertise in software engineering and systems, he actively encourages student participation in national-level hackathons like SIH and DotSlash.",
+  }
 ];

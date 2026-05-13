@@ -2,17 +2,18 @@ import { cn } from "@/lib/utils";
 
 interface BadgeProps {
   children: React.ReactNode;
-  variant?: "default" | "primary" | "success" | "warning" | "danger" | "outline";
+  variant?: "default" | "primary" | "success" | "warning" | "danger" | "outline" | "secondary";
   className?: string;
 }
 
 const variants = {
-  default: "bg-white/[0.06] text-muted border-border",
-  primary: "bg-primary/10 text-primary border-primary/20",
-  success: "bg-emerald-500/10 text-emerald-400 border-emerald-500/20",
-  warning: "bg-amber-500/10 text-amber-400 border-amber-500/20",
-  danger: "bg-red-500/10 text-red-400 border-red-500/20",
-  outline: "bg-transparent text-muted border-border",
+  default: "bg-white text-foreground border-foreground",
+  primary: "bg-primary text-foreground border-foreground",
+  success: "bg-accent text-white border-foreground",
+  warning: "bg-amber-400 text-foreground border-foreground",
+  danger: "bg-red-500 text-white border-foreground",
+  outline: "bg-transparent text-foreground border-foreground",
+  secondary: "bg-secondary text-white border-foreground",
 };
 
 export default function Badge({
@@ -23,7 +24,7 @@ export default function Badge({
   return (
     <span
       className={cn(
-        "inline-flex items-center gap-1.5 px-2.5 py-1 text-xs font-medium rounded-full border",
+        "inline-flex items-center gap-1.5 px-3 py-1 text-[11px] font-bold uppercase tracking-wider rounded-full border-2",
         variants[variant],
         className
       )}
