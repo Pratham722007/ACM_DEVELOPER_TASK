@@ -1,8 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { stringToColor, getInitials } from "@/lib/utils";
-import Badge from "@/components/ui/Badge";
+import { ArrowUpRight } from "lucide-react";
 import type { TeamMember } from "@/types";
 
 /* Inline SVG social icons */
@@ -28,75 +27,74 @@ interface TeamCardProps {
 }
 
 export default function TeamCard({ member, index }: TeamCardProps) {
-  const bgColor = stringToColor(member.name);
-
-  const roleVariant = (() => {
-    switch (member.role) {
-      case "President":
-        return "primary" as const;
-      case "Vice President":
-        return "success" as const;
-      default:
-        if (member.role.includes("Lead")) return "warning" as const;
-        return "default" as const;
-    }
-  })();
+  // If no image is provided, we generate a highly aesthetic gradient based on name length
+  const hash = member.name.length;
+  const gradient = `linear-gradient(${hash * 40}deg, #111111, #222222, #050510)`;
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, y: -10 }}
-      transition={{ duration: 0.3, delay: index * 0.03 }}
-      className="card-surface p-5 group"
+      initial={{ opacity: 0, y: 40 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      whileHover={{ y: -8, boxShadow: "0 25px 50px -12px rgba(0,0,0,0.25)" }}
+      viewport={{ once: true, margin: "-50px" }}
+      transition={{ duration: 0.6, delay: index * 0.05, ease: [0.21, 0.47, 0.32, 0.98] }}
+      className="group relative w-[280px] md:w-[320px] h-[380px] md:h-[440px] rounded-[24px] overflow-hidden shrink-0 flex flex-col justify-end p-6 border border-[#111111]/10 bg-white cursor-pointer"
     >
-      <div className="flex items-start gap-4">
-        {/* Avatar */}
-        <div
-          className="w-14 h-14 rounded-full flex items-center justify-center shrink-0 text-sm font-black text-white border-2 border-foreground"
-          style={{ backgroundColor: bgColor }}
-        >
-          {getInitials(member.name)}
-        </div>
-
-        {/* Info */}
-        <div className="flex-1 min-w-0">
-          <h3 className="text-sm font-bold text-foreground truncate">
-            {member.name}
-          </h3>
-          <Badge variant={roleVariant} className="mt-1.5">
-            {member.role}
-          </Badge>
-          <p className="text-xs font-semibold text-muted mt-1.5 uppercase tracking-wide">
-            {member.domain}
-          </p>
-        </div>
+      {/* Background Image / Placeholder */}
+      <div className="absolute inset-0 z-0 bg-[#f5f0e8] overflow-hidden">
+        {member.image ? (
+          <motion.img 
+            src={member.image} 
+            alt={member.name}
+            className="w-full h-full object-cover opacity-95 brightness-[0.97] group-hover:scale-[1.04] group-hover:opacity-100 group-hover:brightness-105 transition-all duration-700 ease-[cubic-bezier(0.21,0.47,0.32,0.98)]"
+          />
+        ) : (
+          <div 
+            className="w-full h-full opacity-60 group-hover:scale-[1.04] group-hover:opacity-100 transition-all duration-700 ease-[cubic-bezier(0.21,0.47,0.32,0.98)]" 
+            style={{ background: gradient }}
+          />
+        )}
+        
+        {/* Soft shadow gradient overlay for text readability (classic editorial dark card) */}
+        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-80 group-hover:opacity-100 transition-opacity duration-700 ease-[cubic-bezier(0.21,0.47,0.32,0.98)]" />
       </div>
 
-      {/* Social icons — visible on hover */}
-      <div className="flex gap-2 mt-4 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-        {member.linkedin && (
-          <a
-            href={member.linkedin}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex h-8 w-8 items-center justify-center rounded-full border-2 border-foreground text-foreground hover:bg-foreground hover:text-white transition-all"
-            aria-label={`${member.name} LinkedIn`}
-          >
-            <LinkedinIcon />
-          </a>
-        )}
-        {member.github && (
-          <a
-            href={member.github}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex h-8 w-8 items-center justify-center rounded-full border-2 border-foreground text-foreground hover:bg-foreground hover:text-white transition-all"
-            aria-label={`${member.name} GitHub`}
-          >
-            <GithubIcon />
-          </a>
-        )}
+      {/* Content */}
+      <div className="relative z-10 flex flex-col w-full translate-y-6 group-hover:translate-y-0 transition-transform duration-500 ease-out">
+        
+        {/* Domain Badge */}
+        <div className="flex items-center gap-2 mb-3">
+          <span className="px-3 py-1 text-[9px] font-black tracking-[0.2em] uppercase rounded-full bg-white/10 backdrop-blur-md text-white border border-white/20 shadow-sm">
+            {member.domain}
+          </span>
+        </div>
+
+        <h3 className="text-2xl md:text-3xl font-bold text-white tracking-tight leading-none mb-2 drop-shadow-sm">
+          {member.name}
+        </h3>
+        
+        <p className="text-[#A3E635] text-xs font-black uppercase tracking-[0.2em] mb-4">
+          {member.role}
+        </p>
+
+        {/* Socials & Interaction Line */}
+        <div className="flex items-center justify-between w-full pt-4 border-t border-white/10 opacity-0 group-hover:opacity-100 transition-all duration-500 delay-75">
+          <div className="flex gap-4">
+            {member.linkedin && (
+              <a href={member.linkedin} target="_blank" rel="noopener noreferrer" className="text-white/50 hover:text-white hover:scale-110 transition-all">
+                <LinkedinIcon size={18} />
+              </a>
+            )}
+            {member.github && (
+              <a href={member.github} target="_blank" rel="noopener noreferrer" className="text-white/50 hover:text-white hover:scale-110 transition-all">
+                <GithubIcon size={18} />
+              </a>
+            )}
+          </div>
+          <div className="w-8 h-8 rounded-full bg-white/10 backdrop-blur-md flex items-center justify-center -translate-x-4 group-hover:translate-x-0 transition-transform duration-500 border border-white/20">
+            <ArrowUpRight size={14} className="text-[#A3E635]" />
+          </div>
+        </div>
       </div>
     </motion.div>
   );

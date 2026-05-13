@@ -1,279 +1,285 @@
 "use client";
 
-import { useState, useMemo } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { Users, ChevronRight, Award } from "lucide-react";
-import { teamMembers, yearHighlights } from "@/data/team";
+import { useState, useMemo, useRef, useEffect } from "react";
+import { motion, useScroll, useTransform, useSpring } from "framer-motion";
+import { ArrowRight, ArrowLeft, ArrowUp } from "lucide-react";
+import { teamMembers } from "@/data/team";
 import TeamCard from "@/components/sections/TeamCard";
-import Badge from "@/components/ui/Badge";
+import { cn } from "@/lib/utils";
 
-// Get unique years from team data and sort them ascending
-const allYears = Array.from(new Set(teamMembers.map((m) => m.year))).sort(
-  (a, b) => a - b
-);
+// Get unique years (descending so newest is first)
+const allYears = Array.from(new Set(teamMembers.map((m) => m.year))).sort((a, b) => b - a);
 
-const roleOrder = [
-  "Chairperson",
-  "Vice-Chairperson",
-  "Secretary",
-  "Treasurer",
-  "Developer",
-  "Designer",
-  "Problem Setter",
-  "Editor",
-  "Community Head",
-  "Core Member",
-];
+function MagneticButton({ children, className, style, onClick }: any) {
+  const ref = useRef<HTMLButtonElement>(null);
+  const [position, setPosition] = useState({ x: 0, y: 0 });
+
+  const handleMouse = (e: React.MouseEvent<HTMLButtonElement>) => {
+    if (!ref.current) return;
+    const { clientX, clientY } = e;
+    const { height, width, left, top } = ref.current.getBoundingClientRect();
+    const middleX = clientX - (left + width / 2);
+    const middleY = clientY - (top + height / 2);
+    setPosition({ x: middleX * 0.3, y: middleY * 0.3 });
+  };
+
+  const reset = () => setPosition({ x: 0, y: 0 });
+
+  return (
+    <motion.button
+      ref={ref}
+      onClick={onClick}
+      onMouseMove={handleMouse}
+      onMouseLeave={reset}
+      animate={{ x: position.x, y: position.y }}
+      transition={{ type: "spring", stiffness: 150, damping: 15, mass: 0.1 }}
+      className={className}
+      style={style}
+    >
+      {children}
+    </motion.button>
+  );
+}
+
+function AmbientGlow() {
+  const mouseX = useSpring(0, { stiffness: 100, damping: 30, mass: 1 });
+  const mouseY = useSpring(0, { stiffness: 100, damping: 30, mass: 1 });
+
+  useEffect(() => {
+    const moveGlow = (e: MouseEvent) => {
+      mouseX.set(e.clientX);
+      mouseY.set(e.clientY);
+    };
+    window.addEventListener("mousemove", moveGlow);
+    return () => window.removeEventListener("mousemove", moveGlow);
+  }, [mouseX, mouseY]);
+
+  return (
+    <motion.div
+      className="pointer-events-none fixed left-0 top-0 z-0 h-[600px] w-[600px] rounded-full bg-[#A3E635]/5 blur-[120px] mix-blend-multiply"
+      style={{
+        x: mouseX,
+        y: mouseY,
+        translateX: "-50%",
+        translateY: "-50%",
+      }}
+    />
+  );
+}
+
+// Ensure the scroll progress is calculated uniquely per card if needed, 
+// but since this is just a standard continuous row, CSS snap + Framer Motion whileInView on cards is sufficient.
+// We will use native CSS snap-x mandatory for the track.
 
 export default function TeamPageContent() {
-  const latestYear = allYears[allYears.length - 1];
-  const [selectedYear, setSelectedYear] = useState(latestYear);
+  const [selectedYear, setSelectedYear] = useState(allYears[0]);
+  const scrollRef = useRef<HTMLDivElement>(null);
 
+  // Filter and safely sort members. Leadership first, then Domain Experts, then Core Members.
   const filteredMembers = useMemo(() => {
     const members = teamMembers.filter((m) => m.year === selectedYear);
-    return members.sort(
-      (a, b) => roleOrder.indexOf(a.role) - roleOrder.indexOf(b.role)
-    );
+    
+    const roleOrder = [
+      "Chairperson",
+      "Vice-Chairperson",
+      "Secretary",
+      "Treasurer",
+      "Developer",
+      "Designer",
+      "Problem Setter",
+      "Editor",
+      "Community Head",
+      "Core Member",
+    ];
+
+    return members.sort((a, b) => {
+      const indexA = roleOrder.indexOf(a.role);
+      const indexB = roleOrder.indexOf(b.role);
+      // Fallback if role is missing from list
+      if (indexA === -1 && indexB === -1) return 0;
+      if (indexA === -1) return 1;
+      if (indexB === -1) return -1;
+      return indexA - indexB;
+    });
   }, [selectedYear]);
 
   const totalMembers = teamMembers.length;
-  const highlights = yearHighlights[selectedYear] || [];
+  const totalYears = allYears.length;
 
-  const leads = filteredMembers.filter(
-    (m) =>
-      m.role === "Chairperson" ||
-      m.role === "Vice-Chairperson" ||
-      m.role === "Secretary" ||
-      m.role === "Treasurer" ||
-      m.role === "Community Head"
-  );
-  
-  const specialized = filteredMembers.filter(
-    (m) =>
-      m.role === "Developer" ||
-      m.role === "Designer" ||
-      m.role === "Problem Setter" ||
-      m.role === "Editor"
-  );
+  useEffect(() => {
+    if (scrollRef.current) scrollRef.current.scrollTo({ left: 0, behavior: 'smooth' });
+  }, [selectedYear]);
 
-  const coreMembers = filteredMembers.filter(
-    (m) => m.role === "Core Member"
-  );
+  useEffect(() => {
+    const container = scrollRef.current;
+    if (!container) return;
+    
+    const handleWheel = (e: WheelEvent) => {
+      if (Math.abs(e.deltaY) > Math.abs(e.deltaX)) {
+        e.preventDefault();
+        container.scrollBy({ left: e.deltaY, behavior: 'auto' });
+      }
+    };
+    
+    container.addEventListener('wheel', handleWheel, { passive: false });
+    return () => container.removeEventListener('wheel', handleWheel);
+  }, []);
+
+  const scrollByAmount = (direction: 'left' | 'right') => {
+    if (scrollRef.current) {
+      // 320px (desktop width) + 24px (gap-6) = 344px offset
+      // 280px (mobile width) + 16px (gap-4) = 296px offset
+      const isMobile = window.innerWidth < 768;
+      const offset = isMobile ? 296 : 344; 
+      scrollRef.current.scrollBy({ left: direction === 'right' ? offset : -offset, behavior: 'smooth' });
+    }
+  };
 
   return (
-    <div className="pt-24 pb-20">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        {/* Header */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-          className="mb-10"
-        >
-          <span className="pill-badge pill-badge--accent mb-4 inline-flex">Our People</span>
-          <h1 className="font-serif text-6xl sm:text-7xl text-foreground italic mb-2">
-            The Team
-          </h1>
-          <p className="text-muted text-lg">
-            The people who make ACM SVNIT what it is — past, present, and future.
-          </p>
-        </motion.div>
-
-        {/* Year Timeline — pill buttons */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.1 }}
-          className="mb-8"
-        >
-          <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-none">
-            {allYears.map((year) => (
-              <button
-                key={year}
-                onClick={() => setSelectedYear(year)}
-                className="relative px-5 py-2.5 text-sm font-bold rounded-full whitespace-nowrap transition-all border-2 border-foreground flex items-center gap-2"
-              >
-                {selectedYear === year && (
-                  <motion.div
-                    layoutId="year-bg"
-                    className="absolute inset-0 rounded-full bg-primary border-2 border-foreground"
-                    transition={{
-                      type: "spring",
-                      stiffness: 380,
-                      damping: 30,
-                    }}
-                  />
-                )}
-                <span
-                  className={`relative z-10 ${
-                    selectedYear === year
-                      ? "text-foreground"
-                      : "text-muted hover:text-foreground"
-                  }`}
-                >
-                  {year}
-                </span>
-                {year === latestYear && (
-                  <span className="relative z-10">
-                    <Badge
-                      variant="success"
-                      className="text-[9px] py-0 px-1.5"
-                    >
-                      Current
-                    </Badge>
-                  </span>
-                )}
-              </button>
-            ))}
-          </div>
-        </motion.div>
-
-        {/* Legacy Counter */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.15 }}
-          className="card-surface p-5 mb-8 flex flex-wrap items-center gap-4 justify-between"
-        >
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-full bg-primary border-2 border-foreground flex items-center justify-center">
-              <Users size={18} className="text-foreground" />
-            </div>
-            <div>
-              <p className="text-sm font-bold text-foreground">
-                Total members across all years
-              </p>
-              <p className="text-xs font-semibold text-muted uppercase tracking-wide">
-                {totalMembers} members · {allYears.length} years of legacy
-              </p>
-            </div>
-          </div>
-          <div className="text-3xl font-black text-foreground tabular-nums">
-            {totalMembers}+
-          </div>
-        </motion.div>
-
-        {/* Year Highlights */}
-        <AnimatePresence mode="wait">
-          {highlights.length > 0 && (
-            <motion.div
-              key={`highlights-${selectedYear}`}
-              initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: "auto" }}
-              exit={{ opacity: 0, height: 0 }}
-              transition={{ duration: 0.3 }}
-              className="overflow-hidden mb-8"
+    <div className="bg-[#f5f0e8] min-h-screen pt-32 pb-0 flex flex-col overflow-hidden relative selection:bg-[#111111] selection:text-white font-sans">
+      
+      {/* Background Atmosphere */}
+      <div className="absolute inset-0 pointer-events-none z-0 opacity-[0.05] mix-blend-multiply bg-[url('https://grainy-gradients.vercel.app/noise.svg')] repeat" />
+      <AmbientGlow />
+      
+      {/* Top Asymmetrical Section */}
+      <div className="px-4 sm:px-8 lg:px-16 w-full max-w-7xl mx-auto z-20 relative">
+        <div className="flex flex-col lg:flex-row justify-between items-start gap-12 lg:gap-20">
+          
+          {/* Left Side: Heading */}
+          <div className="max-w-2xl">
+            <motion.span 
+              initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}
+              className="inline-flex px-4 py-1.5 rounded-full bg-[#111111] text-[#A3E635] text-[10px] font-black tracking-widest uppercase mb-6 shadow-sm"
             >
-              <div className="card-surface p-5">
-                <div className="flex items-center gap-2 mb-3">
-                  <Award size={16} className="text-secondary" />
-                  <h3 className="text-sm font-bold text-foreground uppercase tracking-wide">
-                    {selectedYear === latestYear
-                      ? "This year's highlights"
-                      : `What the ${selectedYear} team built`}
-                  </h3>
+              Creative Collective
+            </motion.span>
+            
+            <motion.h1 
+              initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.1 }}
+              className="text-5xl sm:text-7xl lg:text-[6rem] font-black text-[#111111] tracking-tighter leading-[0.9] mb-6"
+            >
+              Meet The <br className="hidden md:block"/> Collective.
+            </motion.h1>
+            
+            <motion.p 
+              initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.2 }}
+              className="text-lg md:text-xl font-medium text-[#111111]/70 leading-relaxed max-w-lg"
+            >
+              A modern collective of developers, designers, and innovators building the future of computing at SVNIT.
+            </motion.p>
+          </div>
+
+          {/* Right Side: Animated Stats & Year Filter */}
+          <div className="flex flex-col gap-10 lg:pt-4 w-full lg:w-auto lg:items-end">
+            
+            {/* Animated Stats */}
+            <motion.div 
+              initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.6, delay: 0.3 }}
+              className="flex gap-8 md:gap-16 items-center lg:justify-end"
+            >
+              <div className="text-left lg:text-right">
+                <p className="text-[10px] font-black tracking-[0.2em] text-[#111111]/40 uppercase mb-1">Legacy</p>
+                <div className="text-4xl md:text-5xl font-black text-[#111111] tabular-nums tracking-tighter">
+                  {totalYears}
                 </div>
-                <ul className="space-y-2">
-                  {highlights.map((h, i) => (
-                    <li
-                      key={i}
-                      className="flex items-start gap-2 text-sm text-muted"
-                    >
-                      <ChevronRight
-                        size={14}
-                        className="text-secondary mt-0.5 shrink-0"
-                      />
-                      {h}
-                    </li>
-                  ))}
-                </ul>
+                <p className="text-xs font-bold text-[#111111]/60 uppercase">Years</p>
+              </div>
+              <div className="w-[1px] h-12 bg-[#111111]/10" />
+              <div className="text-left lg:text-right">
+                <p className="text-[10px] font-black tracking-[0.2em] text-[#111111]/40 uppercase mb-1">Network</p>
+                <div className="text-4xl md:text-5xl font-black text-[#111111] tabular-nums tracking-tighter">
+                  {totalMembers}+
+                </div>
+                <p className="text-xs font-bold text-[#111111]/60 uppercase">Members</p>
               </div>
             </motion.div>
-          )}
-        </AnimatePresence>
 
-        {/* Role Hierarchy */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.2 }}
-          className="mb-8"
-        >
-          <div className="flex items-center gap-2 flex-wrap text-xs">
-            <span className="pill-badge pill-badge--primary py-1">
-              Leadership
-            </span>
-            <ChevronRight size={14} className="text-foreground" />
-            <span className="pill-badge py-1" style={{ background: "#FCD34D" }}>
-              Domain Experts
-            </span>
-            <ChevronRight size={14} className="text-foreground" />
-            <span className="pill-badge py-1">
-              Core Members
-            </span>
+            {/* Premium Sticky Year Filter Pill container */}
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.4 }}
+              className="flex flex-wrap lg:justify-end gap-2 max-w-md"
+            >
+              {allYears.map((year) => (
+                <button
+                  key={year}
+                  onClick={() => setSelectedYear(year)}
+                  className={cn(
+                    "relative px-6 py-2.5 rounded-full overflow-hidden transition-all shadow-sm group",
+                    selectedYear === year
+                      ? "bg-[#111111] text-white border-2 border-[#111111] shadow-[0_5px_15px_rgba(17,17,17,0.3)] shadow-inner"
+                      : "bg-transparent text-[#111111] border-2 border-[#111111] hover:bg-[#111111]/5 opacity-90"
+                  )}
+                >
+                  <span className={cn(
+                    "text-[11px] uppercase z-10 whitespace-nowrap font-bold transition-all",
+                    selectedYear === year ? "tracking-[0.15em]" : "tracking-[0.1em] group-hover:tracking-[0.15em]"
+                  )}>
+                    {year}
+                  </span>
+                </button>
+              ))}
+            </motion.div>
+
           </div>
-        </motion.div>
+        </div>
+      </div>
 
-        {/* Team Grid */}
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={selectedYear}
-            initial={{ opacity: 0, y: 15 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -15 }}
-            transition={{ duration: 0.3 }}
+      {/* Horizontal Cinematic Gallery Engine */}
+      <div className="relative w-full mt-10 md:mt-24 flex-1 flex items-center mb-10 md:mb-20 z-20">
+        
+        {/* Minimal Scrolling Hint */}
+        <div className="absolute left-6 xl:left-12 top-1/2 -translate-y-1/2 z-10 hidden xl:flex flex-col items-center justify-center opacity-40 pointer-events-none">
+          <motion.div 
+            animate={{ y: [0, -8, 0] }}
+            transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+            className="mb-4"
           >
-            {/* Leadership */}
-            {leads.length > 0 && (
-              <div className="mb-6">
-                <h3 className="text-xs font-bold uppercase tracking-widest text-muted mb-4">
-                  Leadership
-                </h3>
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-                  {leads.map((member, i) => (
-                    <TeamCard key={member.id} member={member} index={i} />
-                  ))}
-                </div>
-              </div>
-            )}
-
-            {/* Specialized Roles (Dev, Design, etc) */}
-            {specialized.length > 0 && (
-              <div className="mb-6">
-                <h3 className="text-xs font-bold uppercase tracking-widest text-muted mb-4">
-                  Domain Experts
-                </h3>
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-                  {specialized.map((member, i) => (
-                    <TeamCard
-                      key={member.id}
-                      member={member}
-                      index={i + leads.length}
-                    />
-                  ))}
-                </div>
-              </div>
-            )}
-
-            {/* Core Members */}
-            {coreMembers.length > 0 && (
-              <div>
-                <h3 className="text-xs font-bold uppercase tracking-widest text-muted mb-4">
-                  Core Members
-                </h3>
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-                  {coreMembers.map((member, i) => (
-                    <TeamCard
-                      key={member.id}
-                      member={member}
-                      index={i + leads.length + specialized.length}
-                    />
-                  ))}
-                </div>
-              </div>
-            )}
+            <ArrowUp size={16} strokeWidth={1.5} className="text-[#111111]" />
           </motion.div>
-        </AnimatePresence>
+          <span className="[writing-mode:vertical-rl] text-[9px] font-bold tracking-[0.4em] uppercase text-[#111111] rotate-180">
+            Scroll To Meet
+          </span>
+        </div>
+
+        {/* High-Visibility Floating Navigation Arrows (Matching Events Page) */}
+        <div className="absolute top-1/2 left-2 sm:left-4 md:left-6 lg:left-12 -translate-y-1/2 z-[100] flex pointer-events-auto">
+          <MagneticButton 
+            onClick={() => scrollByAmount('left')}
+            className="w-12 h-12 md:w-16 md:h-16 rounded-full bg-[#111111]/80 backdrop-blur-md border border-white/10 shadow-[0_10px_30px_rgba(0,0,0,0.4)] text-white hover:border-[#A3E635]/60 hover:shadow-[0_0_30px_rgba(163,230,53,0.25)] hover:scale-105 transition-all group flex items-center justify-center cursor-pointer active:scale-95"
+            aria-label="Scroll Left"
+          >
+            <ArrowLeft size={24} strokeWidth={1.5} className="transition-transform group-hover:-translate-x-1" />
+          </MagneticButton>
+        </div>
+        
+        <div className="absolute top-1/2 right-2 sm:right-4 md:right-6 lg:right-12 -translate-y-1/2 z-[100] flex pointer-events-auto">
+          <MagneticButton 
+            onClick={() => scrollByAmount('right')}
+            className="w-12 h-12 md:w-16 md:h-16 rounded-full bg-[#111111]/80 backdrop-blur-md border border-white/10 shadow-[0_10px_30px_rgba(0,0,0,0.4)] text-white hover:border-[#A3E635]/60 hover:shadow-[0_0_30px_rgba(163,230,53,0.25)] hover:scale-105 transition-all group flex items-center justify-center cursor-pointer active:scale-95"
+            aria-label="Scroll Right"
+          >
+            <ArrowRight size={24} strokeWidth={1.5} className="transition-transform group-hover:translate-x-1" />
+          </MagneticButton>
+        </div>
+
+        {/* Scroll Track */}
+        <div
+          ref={scrollRef}
+          className="flex gap-4 md:gap-6 overflow-x-auto snap-x snap-mandatory px-[10vw] xl:px-[15vw] scrollbar-none items-center w-full py-10 will-change-scroll"
+        >
+          {filteredMembers.map((member, index) => (
+            <div key={member.id} className="snap-center shrink-0 perspective-1000">
+              <TeamCard member={member} index={index} />
+            </div>
+          ))}
+          {filteredMembers.length === 0 && (
+            <div className="w-full text-center text-[#111111]/40 font-bold tracking-widest uppercase text-sm mt-20">
+              No team members found for {selectedYear}.
+            </div>
+          )}
+        </div>
+        
       </div>
     </div>
   );
