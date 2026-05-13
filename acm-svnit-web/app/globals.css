@@ -1,0 +1,250 @@
+@import url("https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&display=swap");
+@import "tailwindcss";
+
+/* ── Tailwind v4 Theme Tokens ──────────────────────────────── */
+@theme inline {
+  --color-background: #050510;
+  --color-foreground: #F8FAFC;
+  --color-primary: #2563EB;
+  --color-secondary: #0EA5E9;
+  --color-muted: #94A3B8;
+  --color-surface: #0D1117;
+  --color-border: rgba(255, 255, 255, 0.08);
+  --color-border-hover: rgba(255, 255, 255, 0.15);
+
+  --font-sans: var(--font-geist-sans), "Inter", system-ui, sans-serif;
+  --font-serif: "Instrument Serif", "Georgia", serif;
+}
+
+/* ── Base Styles ───────────────────────────────────────────── */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--color-background);
+  color: var(--color-foreground);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+}
+
+::selection {
+  background: rgba(37, 99, 235, 0.3);
+  color: #F8FAFC;
+}
+
+/* ── Scrollbar Styling ─────────────────────────────────────── */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #050510;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+/* ── Animated CSS Grid Background ──────────────────────────── */
+.hero-grid-bg {
+  background-image:
+    repeating-linear-gradient(
+      0deg,
+      rgba(255, 255, 255, 0.03) 0px,
+      rgba(255, 255, 255, 0.03) 1px,
+      transparent 1px,
+      transparent 60px
+    ),
+    repeating-linear-gradient(
+      90deg,
+      rgba(255, 255, 255, 0.03) 0px,
+      rgba(255, 255, 255, 0.03) 1px,
+      transparent 1px,
+      transparent 60px
+    );
+  background-size: 60px 60px;
+  animation: gridMove 20s linear infinite;
+}
+
+@keyframes gridMove {
+  0% {
+    background-position: 0 0, 0 0;
+  }
+  100% {
+    background-position: 60px 60px, 60px 60px;
+  }
+}
+
+/* ── Text Shimmer Animation ────────────────────────────────── */
+.text-shimmer {
+  background: linear-gradient(
+    90deg,
+    #F8FAFC 0%,
+    #2563EB 25%,
+    #0EA5E9 50%,
+    #2563EB 75%,
+    #F8FAFC 100%
+  );
+  background-size: 400% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: shimmer 6s ease-in-out infinite;
+}
+
+@keyframes shimmer {
+  0%, 100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+/* ── Marquee Animation ─────────────────────────────────────── */
+.marquee-track {
+  display: flex;
+  width: max-content;
+  animation: marquee 30s linear infinite;
+}
+
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.marquee-track:hover {
+  animation-play-state: paused;
+}
+
+/* ── Glassmorphism Navbar ──────────────────────────────────── */
+.glass-nav {
+  background: rgba(5, 5, 16, 0.6);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+}
+
+.glass-nav.scrolled {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+/* ── Pulsing Dot (Live Now) ────────────────────────────────── */
+.pulse-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #EF4444;
+  position: relative;
+}
+
+.pulse-dot::before {
+  content: "";
+  position: absolute;
+  inset: -3px;
+  border-radius: 50%;
+  background: rgba(239, 68, 68, 0.4);
+  animation: pulse-ring 1.5s ease-out infinite;
+}
+
+@keyframes pulse-ring {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(2.5);
+    opacity: 0;
+  }
+}
+
+/* ── Glow Effect ───────────────────────────────────────────── */
+.glow-blue {
+  box-shadow: 0 0 20px rgba(37, 99, 235, 0.15),
+    0 0 60px rgba(37, 99, 235, 0.05);
+}
+
+/* ── Card Hover Surface ────────────────────────────────────── */
+.card-surface {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card-surface:hover {
+  border-color: var(--color-border-hover);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+
+/* ── Timeline Line ─────────────────────────────────────────── */
+.timeline-line {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: linear-gradient(to bottom, transparent, rgba(37, 99, 235, 0.3), transparent);
+  transform: translateX(-50%);
+}
+
+@media (max-width: 768px) {
+  .timeline-line {
+    left: 20px;
+  }
+}
+
+/* ── Focus Styles ──────────────────────────────────────────── */
+:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+/* ── Toast Styles ──────────────────────────────────────────── */
+.toast {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 100;
+  padding: 16px 24px;
+  border-radius: 12px;
+  background: var(--color-surface);
+  border: 1px solid rgba(16, 185, 129, 0.3);
+  color: #10B981;
+  animation: toastIn 0.3s ease-out, toastOut 0.3s ease-in 2.7s forwards;
+}
+
+@keyframes toastIn {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes toastOut {
+  from {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+}
