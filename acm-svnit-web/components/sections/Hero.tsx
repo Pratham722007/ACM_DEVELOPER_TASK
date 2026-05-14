@@ -1,125 +1,193 @@
 "use client";
 
-import { motion, useScroll, useTransform } from "framer-motion";
+import { motion, useScroll, useTransform, useSpring } from "framer-motion";
 import { useRef } from "react";
-import { ArrowDownRight, Asterisk } from "lucide-react";
+import { ArrowUpRight, Asterisk } from "lucide-react";
 import Link from "next/link";
+import Image from "next/image";
 
 export default function Hero() {
   const containerRef = useRef<HTMLDivElement>(null);
   const { scrollY } = useScroll();
   
-  const y1 = useTransform(scrollY, [0, 500], [0, 200]);
-  const y2 = useTransform(scrollY, [0, 500], [0, -150]);
-  const opacity = useTransform(scrollY, [0, 300], [1, 0]);
+  // Smooth parallax effects
+  const yParallax = useTransform(scrollY, [0, 800], [0, 150]);
+  const yParallaxReverse = useTransform(scrollY, [0, 800], [0, -100]);
+  const smoothY = useSpring(yParallax, { stiffness: 100, damping: 30 });
+  const smoothYReverse = useSpring(yParallaxReverse, { stiffness: 100, damping: 30 });
+  
+  const opacity = useTransform(scrollY, [0, 400], [1, 0]);
 
   return (
-    <section ref={containerRef} className="relative min-h-screen flex flex-col items-center justify-center pt-32 pb-20 overflow-hidden bg-[#f5f0e8]">
-      
-      {/* Background Texture */}
-      <div className="hero-grid-bg absolute inset-0 pointer-events-none" />
-      
-      {/* Ambient Decorative Elements */}
-      <motion.div 
-        style={{ y: y1 }}
-        className="absolute top-40 -left-20 w-96 h-96 bg-[#A3E635]/10 blur-[120px] rounded-full pointer-events-none" 
-      />
-      <motion.div 
-        style={{ y: y2 }}
-        className="absolute bottom-40 -right-20 w-96 h-96 bg-[#8B5CF6]/10 blur-[120px] rounded-full pointer-events-none" 
-      />
-
-      <div className="relative z-10 w-full max-w-7xl px-4 sm:px-8 lg:px-16 flex flex-col items-start">
-        
-        {/* Eyebrow */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          className="flex items-center gap-3 mb-10"
-        >
-          <span className="flex h-6 w-6 items-center justify-center rounded-full bg-[#111111] text-[#A3E635]">
-            <Asterisk size={14} className="animate-spin-slow" />
-          </span>
-          <span className="text-[10px] font-black uppercase tracking-[0.3em] text-[#111111]">
-            EST. 2013 • SVNIT CHAPTER
-          </span>
-        </motion.div>
-
-        {/* Main Heading - Editorial Style */}
-        <div className="relative mb-12">
-          <motion.h1
-            initial={{ opacity: 0, y: 40 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-            className="text-6xl sm:text-8xl md:text-9xl lg:text-[10rem] font-black text-[#111111] tracking-tighter leading-[0.8] mb-4"
-          >
-            Where <br/> Curiosity <br/> Meets <span className="italic font-serif font-normal pr-4">Code.</span>
-          </motion.h1>
-          
-          <motion.div 
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.8, delay: 0.4 }}
-            className="absolute top-0 right-0 hidden lg:block"
-          >
-             <div className="w-40 h-40 rounded-full border border-[#111111]/10 flex flex-col items-center justify-center rotate-12">
-                <span className="text-3xl font-black text-[#111111]">850+</span>
-                <span className="text-[9px] font-black uppercase tracking-widest text-[#111111]/40">Collective</span>
-             </div>
-          </motion.div>
-        </div>
-
-        {/* Bottom Content Row */}
-        <div className="flex flex-col lg:flex-row items-end justify-between w-full gap-12">
-          
-          <motion.div 
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.3 }}
-            className="max-w-md"
-          >
-            <p className="text-lg md:text-xl font-medium text-[#111111]/60 leading-relaxed mb-8">
-              A premium collective of developers, designers, and tech enthusiasts pushing the boundaries of computing at SVNIT.
-            </p>
-            <div className="flex flex-wrap gap-4">
-              <Link 
-                href="/events"
-                className="group flex items-center gap-3 px-8 py-4 rounded-full bg-[#111111] text-white text-xs font-black uppercase tracking-widest hover:bg-[#A3E635] hover:text-[#111111] transition-all duration-300"
-              >
-                Explore Events
-                <ArrowDownRight size={18} className="transition-transform group-hover:rotate-45" />
-              </Link>
-              <Link 
-                href="/team"
-                className="flex items-center gap-3 px-8 py-4 rounded-full border border-[#111111]/10 text-[#111111] text-xs font-black uppercase tracking-widest hover:bg-[#111111]/5 transition-all duration-300"
-              >
-                Meet The Team
-              </Link>
-            </div>
-          </motion.div>
-
-          {/* Scrolling Down Hint */}
-          <motion.div 
-            style={{ opacity }}
-            className="hidden md:flex flex-col items-center gap-4"
-          >
-            <span className="[writing-mode:vertical-rl] text-[9px] font-black uppercase tracking-[0.4em] text-[#111111]/40">
-              Scroll To Explore
-            </span>
-            <div className="w-px h-24 bg-gradient-to-b from-[#111111]/40 to-transparent" />
-          </motion.div>
-
-        </div>
-
-      </div>
-
-      {/* Decorative Large Background Text */}
-      <div className="absolute -bottom-20 left-1/2 -translate-x-1/2 w-full text-center pointer-events-none select-none overflow-hidden h-40">
-        <h2 className="text-[15rem] font-black text-[#111111] opacity-[0.02] tracking-tighter italic leading-none whitespace-nowrap">
-          ACM SVNIT COLLECTIVE 2025
+    <section 
+      ref={containerRef} 
+      className="relative min-h-[85vh] flex flex-col items-center justify-center pt-32 pb-4 overflow-hidden bg-[#f5f0e8]"
+    >
+      {/* Background Text Overlay - Subtle watermark */}
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full text-center pointer-events-none select-none z-0">
+        <h2 className="text-[20vw] font-black text-[#111111]/[0.02] tracking-tighter italic leading-none whitespace-nowrap">
+          ACM SVNIT COLLECTIVE
         </h2>
       </div>
+
+      <div className="relative z-10 w-full max-w-[90rem] px-6 sm:px-10 lg:px-20">
+        <div className="grid grid-cols-1 lg:grid-cols-[1.2fr_1fr] gap-12 lg:gap-24 items-center">
+          
+          {/* Left Side: Editorial Typography & Branding */}
+          <div className="flex flex-col items-start">
+            
+            {/* Branding / Badge Area */}
+            <motion.div
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.8, ease: "easeOut" }}
+              className="flex items-center gap-6 mb-16"
+            >
+              <div className="relative group">
+                <div className="absolute inset-0 bg-[#A3E635] blur-xl opacity-20 group-hover:opacity-40 transition-opacity duration-500 rounded-full" />
+                <Image 
+                  src="/assets/acm-logo.png" 
+                  alt="ACM Logo" 
+                  width={60} 
+                  height={60} 
+                  className="relative z-10 grayscale hover:grayscale-0 transition-all duration-500"
+                />
+              </div>
+              <div className="flex flex-col">
+                <span className="text-[10px] font-black uppercase tracking-[0.4em] text-[#111111]">
+                  Association for Computing Machinery
+                </span>
+                <span className="text-[10px] font-black uppercase tracking-[0.4em] text-[#111111]/40">
+                  Student Chapter · SVNIT Surat
+                </span>
+              </div>
+            </motion.div>
+
+            {/* Main Heading */}
+            <div className="mb-10">
+              <motion.h1
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
+                className="text-[clamp(3.5rem,8vw,8.5rem)] font-black text-[#111111] tracking-tighter leading-[0.85] mb-6"
+              >
+                Where <br/> Innovation <br/> Meets <span className="italic font-serif font-normal text-[#111111]/90">Code.</span>
+              </motion.h1>
+              
+              <motion.p
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 1, delay: 0.2, ease: "easeOut" }}
+                className="max-w-lg text-lg md:text-xl font-medium text-[#111111]/60 leading-relaxed"
+              >
+                A premium collective of developers, designers, and tech enthusiasts pushing the boundaries of computing at SVNIT.
+              </motion.p>
+            </div>
+
+            {/* CTAs & Micro Details */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 1, delay: 0.4 }}
+              className="flex flex-col sm:flex-row items-start sm:items-center gap-8 w-full"
+            >
+              <div className="flex flex-wrap gap-4">
+                <Link 
+                  href="/events"
+                  className="group relative flex items-center gap-3 px-10 py-5 rounded-full bg-[#111111] text-white text-xs font-black uppercase tracking-[0.2em] overflow-hidden transition-all duration-300"
+                >
+                  <div className="absolute inset-0 bg-[#A3E635] scale-x-0 group-hover:scale-x-100 origin-left transition-transform duration-500 ease-out" />
+                  <span className="relative z-10 group-hover:text-[#111111] transition-colors">Explore Events</span>
+                  <ArrowUpRight size={18} className="relative z-10 transition-transform group-hover:translate-x-1 group-hover:-translate-y-1 group-hover:text-[#111111]" />
+                </Link>
+                
+                <Link 
+                  href="/team"
+                  className="group flex items-center gap-3 px-10 py-5 rounded-full border border-[#111111]/10 text-[#111111] text-xs font-black uppercase tracking-[0.2em] hover:bg-[#111111] hover:text-white transition-all duration-300"
+                >
+                  Meet The Collective
+                </Link>
+              </div>
+
+              {/* Establishment Micro Detail */}
+              <div className="hidden xl:flex items-center gap-4 py-4 px-6 border-l border-[#111111]/10">
+                <div className="flex flex-col">
+                  <span className="text-[10px] font-black uppercase tracking-[0.2em] text-[#111111]">EST. 2011</span>
+                  <span className="text-[9px] font-black uppercase tracking-[0.2em] text-[#111111]/40">SVNIT CHAPTER</span>
+                </div>
+              </div>
+            </motion.div>
+
+          </div>
+
+          {/* Right Side: Cinematic Image Composition */}
+          <motion.div
+            initial={{ opacity: 0, scale: 0.98, x: 20 }}
+            animate={{ opacity: 1, scale: 1, x: 0 }}
+            transition={{ duration: 1.4, ease: [0.16, 1, 0.3, 1] }}
+            className="relative w-full lg:w-[115%] lg:-ml-[15%] aspect-[4/3] lg:aspect-[16/10] group"
+          >
+            {/* Main Image Frame */}
+            <div className="relative w-full h-full rounded-[32px] md:rounded-[48px] overflow-hidden shadow-[0_50px_100px_-20px_rgba(0,0,0,0.15)] bg-[#111111]">
+              <motion.div 
+                style={{ y: smoothYReverse }}
+                className="relative w-full h-full"
+              >
+                <Image 
+                  src="/assets/acm_core.png" 
+                  alt="ACM Collective" 
+                  fill
+                  className="object-cover opacity-95 group-hover:scale-105 transition-transform duration-1000 ease-out"
+                  priority
+                />
+                {/* Subtle vignette/gradient overlay */}
+                <div className="absolute inset-0 bg-gradient-to-t from-[#111111]/40 via-transparent to-transparent" />
+              </motion.div>
+            </div>
+
+            {/* Floating Decorative Elements */}
+            <motion.div 
+              style={{ y: smoothY }}
+              className="absolute -top-10 -right-10 w-40 h-40 rounded-full bg-[#A3E635] flex items-center justify-center p-6 shadow-2xl z-20 rotate-12"
+            >
+              <div className="w-full h-full rounded-full border border-[#111111]/10 flex flex-col items-center justify-center text-center">
+                <span className="text-2xl font-black text-[#111111]">850+</span>
+                <span className="text-[8px] font-black uppercase tracking-[0.1em] text-[#111111]/40 leading-none mt-1">Builders</span>
+              </div>
+            </motion.div>
+
+            <motion.div 
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: 0.8 }}
+              className="absolute -bottom-12 -left-12 p-8 rounded-[32px] bg-white shadow-2xl z-20 max-w-[240px] hidden md:block"
+            >
+               <div className="flex items-center gap-3 mb-3">
+                  <Asterisk size={16} className="text-[#A3E635] animate-spin-slow" />
+                  <span className="text-[10px] font-black uppercase tracking-widest text-[#111111]">The Collective</span>
+               </div>
+               <p className="text-xs font-medium text-[#111111]/60 leading-relaxed">
+                 A community of thinkers and makers dedicated to the pursuit of technical excellence.
+               </p>
+            </motion.div>
+
+            {/* Accent Glowing Blob */}
+            <div className="absolute -bottom-20 -right-20 w-80 h-80 bg-[#8B5CF6]/10 blur-[100px] rounded-full pointer-events-none" />
+          </motion.div>
+
+        </div>
+      </div>
+
+      {/* Scroll Down Indicator */}
+      <motion.div 
+        style={{ opacity }}
+        className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-4"
+      >
+        <span className="[writing-mode:vertical-rl] text-[10px] font-black uppercase tracking-[0.4em] text-[#111111]/40">
+          Scroll
+        </span>
+        <div className="w-px h-12 bg-gradient-to-b from-[#111111]/40 to-transparent" />
+      </motion.div>
 
     </section>
   );

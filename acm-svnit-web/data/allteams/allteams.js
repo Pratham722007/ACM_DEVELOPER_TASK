@@ -164,7 +164,7 @@ const allteams = [
   {
     id: 27,
     name: 'Manav Prajapati',
-    year: 2013,
+    year: 2011,
     fblink: 'https://www.facebook.com/manav245',
     mailid: '',
     imgavail: 1,
@@ -174,7 +174,7 @@ const allteams = [
   {
     id: 28,
     name: 'Pallavi Khandelwal',
-    year: 2013,
+    year: 2011,
     fblink: 'https://www.facebook.com/pallavi.khandelwal.8',
     mailid: '',
     imgavail: 1,
@@ -184,7 +184,7 @@ const allteams = [
   {
     id: 29,
     name: 'Vishal Singh',
-    year: 2013,
+    year: 2011,
     fblink: '',
     mailid: '',
     imgavail: 1,
@@ -194,7 +194,7 @@ const allteams = [
   {
     id: 30,
     name: 'Nishit Gajjar',
-    year: 2013,
+    year: 2011,
     fblink: 'https://www.facebook.com/nishit.gajjar.52',
     mailid: '',
     imgavail: 1,
@@ -204,7 +204,7 @@ const allteams = [
   {
     id: 31,
     name: 'Tanisha Jain',
-    year: 2013,
+    year: 2011,
     fblink: 'https://www.facebook.com/Tanisha.Jain27',
     mailid: '',
     imgavail: 1,
@@ -214,7 +214,7 @@ const allteams = [
   {
     id: 32,
     name: 'Sunil Raiyani',
-    year: 2013,
+    year: 2011,
     fblink: 'https://www.facebook.com/sunilraiyani4793',
     mailid: '',
     imgavail: 1,
@@ -224,7 +224,7 @@ const allteams = [
   {
     id: 33,
     name: 'Sukant Garg',
-    year: 2013,
+    year: 2011,
     fblink: 'https://www.facebook.com/gargsms',
     mailid: '',
     imgavail: 1,
@@ -234,7 +234,7 @@ const allteams = [
   {
     id: 34,
     name: 'Ravi Ojha',
-    year: 2013,
+    year: 2011,
     fblink: 'https://www.facebook.com/ivarojha',
     mailid: '',
     imgavail: 1,
@@ -244,7 +244,7 @@ const allteams = [
   {
     id: 35,
     name: 'Kshama Jain',
-    year: 2013,
+    year: 2011,
     fblink: 'https://www.facebook.com/kshama.jain.902',
     mailid: '',
     imgavail: 1,
@@ -254,7 +254,7 @@ const allteams = [
   {
     id: 36,
     name: 'Heer Narang',
-    year: 2013,
+    year: 2011,
     fblink: 'https://www.facebook.com/heernarang',
     mailid: '',
     imgavail: 1,

@@ -11,7 +11,7 @@ interface StatItem {
 
 const stats: StatItem[] = [
   { label: "Members", value: 850, suffix: "+" },
-  { label: "Legacy Years", value: 12, suffix: "" },
+  { label: "Legacy Years", value: 14, suffix: "" },
   { label: "Experiences", value: 42, suffix: "" },
   { label: "Domains", value: 6, suffix: "" },
 ];
@@ -79,7 +79,7 @@ function StatCard({ stat, index }: { stat: StatItem; index: number }) {
 
 export default function Stats() {
   return (
-    <section className="bg-[#f5f0e8] py-20 overflow-hidden">
+    <section className="bg-[#f5f0e8] pt-0 pb-20 overflow-hidden">
       <div className="mx-auto max-w-7xl px-4 sm:px-8 lg:px-16">
         <div className="w-full h-px bg-[#111111]/5 mb-10" />
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-12 divide-y lg:divide-y-0 lg:divide-x divide-[#111111]/5">

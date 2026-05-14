@@ -297,7 +297,7 @@ export default function AboutPageContent() {
             A Collective <br/> Built on <span className="italic font-serif font-normal pr-4">Craft.</span>
           </h1>
           <p className="text-xl md:text-2xl font-medium text-[#111111]/60 leading-relaxed max-w-2xl">
-            Founded in 2013, we are the SVNIT chapter of the world&apos;s largest computing society — pushing the boundaries of code, design, and innovation.
+            Founded in 2011, we are the SVNIT chapter of the world&apos;s largest computing society — pushing the boundaries of code, design, and innovation.
           </p>
         </motion.div>
 

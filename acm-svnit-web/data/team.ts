@@ -17,16 +17,16 @@ export const teamMembers: TeamMember[] = [
   { id: "t2012-024", name: "Praveen Chaudhary", role: "Treasurer", domain: "General", year: 2012 },
   { id: "t2012-025", name: "Harsha Satya", role: "Developer", domain: "General", year: 2012, image: "/teams/allteams/25.jpg" },
   { id: "t2012-026", name: "Jitesh Sunhala", role: "Developer", domain: "General", year: 2012, image: "/teams/allteams/26.jpg" },
-  { id: "t2013-027", name: "Manav Prajapati", role: "Chairperson", domain: "General", year: 2013, image: "/teams/allteams/27.jpg" },
-  { id: "t2013-028", name: "Pallavi Khandelwal", role: "Chairperson", domain: "General", year: 2013, image: "/teams/allteams/28.jpg" },
-  { id: "t2013-029", name: "Vishal Singh", role: "Secretary", domain: "General", year: 2013, image: "/teams/allteams/29.jpg" },
-  { id: "t2013-030", name: "Nishit Gajjar", role: "Secretary", domain: "General", year: 2013, image: "/teams/allteams/30.jpg" },
-  { id: "t2013-031", name: "Tanisha Jain", role: "Treasurer", domain: "General", year: 2013, image: "/teams/allteams/31.jpg" },
-  { id: "t2013-032", name: "Sunil Raiyani", role: "Treasurer", domain: "General", year: 2013, image: "/teams/allteams/32.jpg" },
-  { id: "t2013-033", name: "Sukant Garg", role: "Developer", domain: "General", year: 2013, image: "/teams/allteams/33.jpg" },
-  { id: "t2013-034", name: "Ravi Ojha", role: "Designer", domain: "General", year: 2013, image: "/teams/allteams/34.jpg" },
-  { id: "t2013-035", name: "Kshama Jain", role: "Editor", domain: "General", year: 2013, image: "/teams/allteams/35.jpg" },
-  { id: "t2013-036", name: "Heer Narang", role: "Editor", domain: "General", year: 2013, image: "/teams/allteams/36.jpg" },
+  { id: "t2011-027", name: "Manav Prajapati", role: "Chairperson", domain: "General", year: 2011, image: "/teams/allteams/27.jpg" },
+  { id: "t2011-028", name: "Pallavi Khandelwal", role: "Chairperson", domain: "General", year: 2011, image: "/teams/allteams/28.jpg" },
+  { id: "t2011-029", name: "Vishal Singh", role: "Secretary", domain: "General", year: 2011, image: "/teams/allteams/29.jpg" },
+  { id: "t2011-030", name: "Nishit Gajjar", role: "Secretary", domain: "General", year: 2011, image: "/teams/allteams/30.jpg" },
+  { id: "t2011-031", name: "Tanisha Jain", role: "Treasurer", domain: "General", year: 2011, image: "/teams/allteams/31.jpg" },
+  { id: "t2011-032", name: "Sunil Raiyani", role: "Treasurer", domain: "General", year: 2011, image: "/teams/allteams/32.jpg" },
+  { id: "t2011-033", name: "Sukant Garg", role: "Developer", domain: "General", year: 2011, image: "/teams/allteams/33.jpg" },
+  { id: "t2011-034", name: "Ravi Ojha", role: "Designer", domain: "General", year: 2011, image: "/teams/allteams/34.jpg" },
+  { id: "t2011-035", name: "Kshama Jain", role: "Editor", domain: "General", year: 2011, image: "/teams/allteams/35.jpg" },
+  { id: "t2011-036", name: "Heer Narang", role: "Editor", domain: "General", year: 2011, image: "/teams/allteams/36.jpg" },
   { id: "t2014-038", name: "Jay Panchal", role: "Chairperson", domain: "General", year: 2014, image: "/teams/allteams/38.jpg" },
   { id: "t2014-039", name: "Gurvinder Singh", role: "Chairperson", domain: "General", year: 2014, image: "/teams/allteams/39.jpg" },
   { id: "t2014-040", name: "Prashant Arya", role: "Secretary", domain: "General", year: 2014, image: "/teams/allteams/40.jpg" },
@@ -228,15 +228,13 @@ export const teamMembers: TeamMember[] = [
 export const yearHighlights: Record<number, string[]> = {
   "2011": [
     "ACM NIT Surat chapter founded",
-    "Initial team of 8 members established"
+    "Initial team of 8 members established",
+    "Team expanded with designer and editor roles",
+    "10 team members across various positions"
   ],
   "2012": [
     "Second year of the chapter",
     "Growing to 8 team members"
-  ],
-  "2013": [
-    "Team expanded with designer and editor roles",
-    "10 team members across various positions"
   ],
   "2014": [
     "Structured team with dedicated web developers",

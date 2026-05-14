@@ -109,17 +109,15 @@ const yearHighlights = {
     "Structured team with dedicated web developers",
     "Editor and problem setter roles added",
   ],
-  2013: [
+  2011: [
+    "ACM NIT Surat chapter founded",
+    "Initial team of 8 members established",
     "Team expanded with designer and editor roles",
     "10 team members across various positions",
   ],
   2012: [
     "Second year of the chapter",
     "Growing to 8 team members",
-  ],
-  2011: [
-    "ACM NIT Surat chapter founded",
-    "Initial team of 8 members established",
   ],
 };
 

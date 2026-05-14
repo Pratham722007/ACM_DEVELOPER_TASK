@@ -149,7 +149,7 @@ export default function Loader({ children }: LoaderProps) {
                         transition={{ delay: 0.4, duration: 1 }}
                         className="text-[10px] md:text-xs font-black uppercase tracking-[0.6em] text-[#8B5CF6] mb-8"
                       >
-                        ACM SVNIT — EST. 2013
+                        ACM SVNIT — EST. 2011
                       </motion.div>
 
                       <motion.h1 
