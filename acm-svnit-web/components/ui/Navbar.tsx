@@ -2,17 +2,16 @@
 
 import { useState, useEffect, useRef, useCallback } from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
 import { motion, AnimatePresence, useScroll, useMotionValueEvent } from "framer-motion";
-import { ArrowUpRight } from "lucide-react";
 import { cn } from "@/lib/utils";
-import Image from "next/image";
 
 const navLinks = [
-  { label: "Home", href: "/", fontClass: "font-[family-name:var(--font-playfair)] italic font-bold tracking-wide capitalize" },
-  { label: "Events", href: "/events", fontClass: "font-[family-name:var(--font-playfair)] italic font-bold tracking-wide capitalize" },
-  { label: "Team", href: "/team", fontClass: "font-[family-name:var(--font-playfair)] italic font-bold tracking-wide capitalize" },
-  { label: "About", href: "/about", fontClass: "font-[family-name:var(--font-playfair)] italic font-bold tracking-wide capitalize" },
+  { label: "Home", href: "#hero", fontClass: "font-[family-name:var(--font-playfair)] italic font-bold tracking-wide capitalize" },
+  { label: "Events", href: "#events", fontClass: "font-[family-name:var(--font-playfair)] italic font-bold tracking-wide capitalize" },
+  { label: "Team", href: "#team", fontClass: "font-[family-name:var(--font-playfair)] italic font-bold tracking-wide capitalize" },
+  { label: "Domains", href: "#domains", fontClass: "font-[family-name:var(--font-playfair)] italic font-bold tracking-wide capitalize" },
+  { label: "About", href: "#about", fontClass: "font-[family-name:var(--font-playfair)] italic font-bold tracking-wide capitalize" },
+  { label: "News", href: "#news", fontClass: "font-[family-name:var(--font-playfair)] italic font-bold tracking-wide capitalize" },
 ];
 
 /* ───────────────────────────────────────────────
@@ -45,8 +44,22 @@ function MagneticLink({
 
   const reset = () => setPosition({ x: 0, y: 0 });
 
+  const handleClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    if (onClick) onClick();
+    const lenis = (window as any).lenis;
+    if (lenis) {
+      lenis.scrollTo(href, { offset: -100, duration: 1.5 });
+    } else {
+      const el = document.querySelector(href);
+      if (el) {
+        window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - 100, behavior: "smooth" });
+      }
+    }
+  };
+
   return (
-    <Link href={href} onClick={onClick}>
+    <a href={href} onClick={handleClick}>
       <motion.div
         ref={ref}
         onMouseMove={handleMouse}
@@ -77,7 +90,7 @@ function MagneticLink({
 
         <span className="relative z-10">{children}</span>
       </motion.div>
-    </Link>
+    </a>
   );
 }
 
@@ -87,17 +100,45 @@ function MagneticLink({
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
-  const pathname = usePathname();
+  const [activeSection, setActiveSection] = useState("#hero");
   const { scrollY } = useScroll();
 
   useMotionValueEvent(scrollY, "change", (latest) => {
     setScrolled(latest > 30);
   });
 
-  // Close mobile menu on route change
+  // Dynamic Scroll Spy
   useEffect(() => {
-    setMobileOpen(false);
-  }, [pathname]);
+    const observer = new IntersectionObserver(
+      (entries) => {
+        let maxVisible = 0;
+        let mostVisibleSection = activeSection;
+
+        entries.forEach((entry) => {
+          if (entry.isIntersecting && entry.intersectionRatio > maxVisible) {
+            maxVisible = entry.intersectionRatio;
+            mostVisibleSection = `#${entry.target.id}`;
+          }
+        });
+
+        if (maxVisible > 0) {
+          setActiveSection(mostVisibleSection);
+        }
+      },
+      {
+        root: null,
+        rootMargin: "-20% 0px -40% 0px",
+        threshold: [0, 0.2, 0.5, 0.8, 1],
+      }
+    );
+
+    const sections = document.querySelectorAll("section[id]");
+    sections.forEach((section) => observer.observe(section));
+
+    return () => {
+      sections.forEach((section) => observer.unobserve(section));
+    };
+  }, [activeSection]);
 
   // Lock body scroll when mobile menu is open
   useEffect(() => {
@@ -110,6 +151,16 @@ export default function Navbar() {
   }, [mobileOpen]);
 
   const closeMobile = useCallback(() => setMobileOpen(false), []);
+
+  const handleLogoClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    const lenis = (window as any).lenis;
+    if (lenis) {
+      lenis.scrollTo(0, { duration: 1.5 });
+    } else {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+  };
 
   return (
     <>
@@ -128,14 +179,14 @@ export default function Navbar() {
           )}
         >
           {/* ─── Brand ─── */}
-          <Link href="/" className="flex flex-col pl-4 group">
+          <a href="#hero" onClick={handleLogoClick} className="flex flex-col pl-4 group cursor-pointer">
             <span className="text-[13px] font-black tracking-widest text-[#111111] uppercase leading-none group-hover:opacity-80 transition-opacity">
               ACM SVNIT
             </span>
             <span className="text-[8px] font-bold tracking-[0.4em] text-[#111111]/40 uppercase leading-none mt-1.5">
               EST. 2011
             </span>
-          </Link>
+          </a>
 
           {/* ─── Desktop Navigation ─── */}
           <div className="hidden md:flex items-center gap-2 px-2 py-1">
@@ -143,7 +194,7 @@ export default function Navbar() {
               <MagneticLink
                 key={link.href}
                 href={link.href}
-                isActive={pathname === link.href}
+                isActive={activeSection === link.href}
                 fontClass={link.fontClass}
               >
                 {link.label}
@@ -151,11 +202,8 @@ export default function Navbar() {
             ))}
           </div>
 
-          {/* ─── CTA + Mobile Toggle ─── */}
+          {/* ─── Mobile Toggle ─── */}
           <div className="flex items-center gap-3 pr-1 sm:pr-2">
-
-
-            {/* Mobile menu button */}
             <motion.button
               whileTap={{ scale: 0.9 }}
               onClick={() => setMobileOpen(!mobileOpen)}
@@ -203,7 +251,7 @@ export default function Navbar() {
             {/* Navigation Links */}
             <div className="relative z-10 flex-1 flex flex-col justify-center px-8 sm:px-12 gap-2">
               {navLinks.map((link, i) => {
-                const isActive = pathname === link.href;
+                const isActive = activeSection === link.href;
                 return (
                   <motion.div
                     key={link.href}
@@ -216,9 +264,21 @@ export default function Navbar() {
                       ease: [0.22, 1, 0.36, 1],
                     }}
                   >
-                    <Link
+                    <a
                       href={link.href}
-                      onClick={closeMobile}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        closeMobile();
+                        const lenis = (window as any).lenis;
+                        if (lenis) {
+                          lenis.scrollTo(link.href, { offset: -100, duration: 1.5 });
+                        } else {
+                          const el = document.querySelector(link.href);
+                          if (el) {
+                            window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - 100, behavior: "smooth" });
+                          }
+                        }
+                      }}
                       className={cn(
                         "block py-4 text-4xl sm:text-5xl font-black uppercase tracking-tight transition-colors duration-300",
                         isActive
@@ -232,12 +292,10 @@ export default function Navbar() {
                         </span>
                         {link.label}
                       </span>
-                    </Link>
+                    </a>
                   </motion.div>
                 );
               })}
-
-
             </div>
 
             {/* Bottom Metadata */}

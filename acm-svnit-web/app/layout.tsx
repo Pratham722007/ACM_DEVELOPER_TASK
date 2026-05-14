@@ -3,6 +3,7 @@ import { Geist, Playfair_Display } from "next/font/google";
 import Navbar from "@/components/ui/Navbar";
 import Footer from "@/components/ui/Footer";
 import Loader from "@/components/ui/Loader";
+import SmoothScroll from "@/components/ui/SmoothScroll";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -42,11 +43,13 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${geistSans.variable} ${playfair.variable} h-full`}>
       <body className="min-h-full flex flex-col antialiased bg-[#f5f0e8] text-[#111111] overflow-x-hidden">
-        <Loader>
-          <Navbar />
-          <main className="flex-1 relative z-0">{children}</main>
-          <Footer />
-        </Loader>
+        <SmoothScroll>
+          <Loader>
+            <Navbar />
+            <main className="flex-1 relative z-0">{children}</main>
+            <Footer />
+          </Loader>
+        </SmoothScroll>
       </body>
     </html>
   );

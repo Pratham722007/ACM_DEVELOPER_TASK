@@ -307,7 +307,7 @@ export default function EventsPageContent() {
   };
 
   return (
-    <div className="bg-[#f5f0e8] min-h-screen pt-32 pb-0 flex flex-col overflow-hidden relative selection:bg-[#111111] selection:text-white font-sans">
+    <div className="bg-[#f5f0e8] pt-8 pb-0 flex flex-col overflow-hidden relative selection:bg-[#111111] selection:text-white font-sans">
       
       {/* Background Atmosphere */}
       <div className="absolute inset-0 pointer-events-none z-0 opacity-[0.04] mix-blend-multiply bg-[url('https://grainy-gradients.vercel.app/noise.svg')] repeat" />
