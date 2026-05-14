@@ -1,96 +1,145 @@
 "use client";
 
 import { motion } from "framer-motion";
-import Link from "next/link";
-import { domains } from "@/data/domains";
-import {
-  Globe,
-  Brain,
-  Code,
-  Shield,
-  Palette,
-  GitBranch,
-  ArrowRight,
-} from "lucide-react";
+import { Braces, Palette, Cpu, Globe, Terminal, Shield } from "lucide-react";
 
-const iconMap: Record<string, React.ComponentType<{ size?: number; className?: string }>> = {
-  Globe,
-  Brain,
-  Code,
-  Shield,
-  Palette,
-  GitBranch,
-};
+const domains = [
+  {
+    id: "cp",
+    title: "Competitive Programming",
+    description: "Master algorithms, data structures, and problem-solving to excel in global coding competitions.",
+    icon: Terminal,
+    color: "#A3E635",
+  },
+  {
+    id: "dev",
+    title: "Web & App Development",
+    description: "Build modern, scalable applications using the latest frameworks and industry-best practices.",
+    icon: Globe,
+    color: "#8B5CF6",
+  },
+  {
+    id: "design",
+    title: "UI/UX & Creative Design",
+    description: "Craft immersive digital experiences through thoughtful design and user-centric interfaces.",
+    icon: Palette,
+    color: "#ffffff",
+  },
+  {
+    id: "systems",
+    title: "Systems & Security",
+    description: "Dive into low-level programming, operating systems, and cybersecurity fundamentals.",
+    icon: Shield,
+    color: "#A3E635",
+  },
+  {
+    id: "hardware",
+    title: "Hardware & IoT",
+    description: "Explore the intersection of software and hardware through robotics and embedded systems.",
+    icon: Cpu,
+    color: "#8B5CF6",
+  },
+  {
+    id: "ai",
+    title: "AI & Data Science",
+    description: "Unlock the power of data through machine learning, neural networks, and predictive modeling.",
+    icon: Braces,
+    color: "#ffffff",
+  },
+];
 
-export default function DomainCards() {
+function DomainCard({ domain, index }: { domain: typeof domains[0]; index: number }) {
   return (
-    <motion.section
+    <motion.div
       initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
-      transition={{ duration: 0.5 }}
-      className="py-20 sm:py-24"
+      transition={{ duration: 0.5, delay: index * 0.1 }}
+      whileHover={{ y: -10 }}
+      className="group relative h-[400px] w-full rounded-[32px] bg-[#111111] p-8 overflow-hidden transition-all duration-500 shadow-2xl hover:shadow-[#111111]/40"
     >
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        {/* Section header */}
-        <div className="mb-14">
-          <span className="pill-badge pill-badge--secondary mb-4 inline-flex">Our Domains</span>
-          <h2 className="font-serif text-5xl sm:text-6xl text-foreground mb-4 italic">
-            What We Build
-          </h2>
-          <p className="text-muted text-lg max-w-2xl">
-            Six specialized domains driving innovation and learning across the
-            computing landscape.
+      {/* Accent Background Glow */}
+      <div 
+        className="absolute -top-24 -right-24 w-64 h-64 blur-[100px] opacity-20 transition-opacity group-hover:opacity-40"
+        style={{ backgroundColor: domain.color }}
+      />
+
+      <div className="relative z-10 h-full flex flex-col justify-between">
+        <div>
+          <div 
+            className="w-14 h-14 rounded-2xl flex items-center justify-center mb-8 border border-white/10 group-hover:scale-110 transition-transform duration-500"
+            style={{ backgroundColor: domain.color === "#ffffff" ? "#ffffff" : "transparent" }}
+          >
+            <domain.icon 
+              size={28} 
+              strokeWidth={1.5} 
+              style={{ color: domain.color === "#ffffff" ? "#111111" : domain.color }} 
+            />
+          </div>
+          <h3 className="text-2xl font-black text-white tracking-tighter leading-tight mb-4 pr-10">
+            {domain.title}
+          </h3>
+          <p className="text-sm font-medium text-white/50 leading-relaxed max-w-[240px]">
+            {domain.description}
           </p>
         </div>
 
-        {/* Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-          {domains.map((domain) => {
-            const Icon = iconMap[domain.icon] || Globe;
-            return (
-              <motion.div
-                key={domain.id}
-                whileHover={{ scale: 1.02 }}
-                transition={{ type: "spring", stiffness: 300, damping: 20 }}
-              >
-                <Link href={`/domains`} className="block">
-                  <div className="card-surface p-6 h-full group">
-                    {/* Icon */}
-                    <div
-                      className="w-12 h-12 rounded-xl flex items-center justify-center mb-4 border-2 border-foreground"
-                      style={{
-                        backgroundColor: `${domain.color}20`,
-                        color: domain.color,
-                      }}
-                    >
-                      <Icon size={24} />
-                    </div>
-
-                    {/* Name & Count */}
-                    <h3 className="text-xl font-bold text-foreground mb-1">
-                      {domain.name}
-                    </h3>
-                    <p className="text-xs font-semibold text-muted uppercase tracking-wide mb-3">
-                      {domain.memberCount} members
-                    </p>
-
-                    {/* Description */}
-                    <p className="text-sm text-muted leading-relaxed mb-4 line-clamp-2">
-                      {domain.description}
-                    </p>
-
-                    {/* CTA */}
-                    <span className="inline-flex items-center gap-1.5 text-sm font-bold text-foreground group-hover:gap-2.5 transition-all uppercase tracking-wide">
-                      Explore <ArrowRight size={14} />
-                    </span>
-                  </div>
-                </Link>
-              </motion.div>
-            );
-          })}
+        <div className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-white/30 group-hover:text-white transition-colors">
+          Explore Domain <Braces size={12} />
         </div>
       </div>
-    </motion.section>
+
+      {/* Large Decorative Number */}
+      <div className="absolute -bottom-8 -right-4 text-[12rem] font-black text-white/[0.03] italic leading-none pointer-events-none select-none">
+        0{index + 1}
+      </div>
+    </motion.div>
+  );
+}
+
+export default function DomainCards() {
+  return (
+    <section className="py-32 bg-[#f5f0e8] relative overflow-hidden">
+      <div className="mx-auto max-w-7xl px-4 sm:px-8 lg:px-16">
+        
+        <div className="flex flex-col lg:flex-row justify-between items-end gap-12 mb-20">
+          <div className="max-w-2xl">
+            <motion.span 
+              initial={{ opacity: 0, x: -20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              className="text-[10px] font-black uppercase tracking-[0.3em] text-[#111111]/40 block mb-6"
+            >
+              Our Expertise
+            </motion.span>
+            <motion.h2 
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.1 }}
+              className="text-5xl sm:text-7xl font-black text-[#111111] tracking-tighter leading-[0.9]"
+            >
+              Domains of <br/> Excellence.
+            </motion.h2>
+          </div>
+          <motion.p 
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.2 }}
+            className="text-lg font-medium text-[#111111]/60 max-w-sm lg:text-right"
+          >
+            A multidisciplinary collective focused on the core pillars of modern computing.
+          </motion.p>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {domains.map((domain, index) => (
+            <DomainCard key={domain.id} domain={domain} index={index} />
+          ))}
+        </div>
+
+      </div>
+    </section>
   );
 }

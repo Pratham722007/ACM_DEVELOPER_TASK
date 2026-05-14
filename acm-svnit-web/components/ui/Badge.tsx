@@ -7,13 +7,13 @@ interface BadgeProps {
 }
 
 const variants = {
-  default: "bg-white text-foreground border-foreground",
-  primary: "bg-primary text-foreground border-foreground",
-  success: "bg-accent text-white border-foreground",
-  warning: "bg-amber-400 text-foreground border-foreground",
-  danger: "bg-red-500 text-white border-foreground",
-  outline: "bg-transparent text-foreground border-foreground",
-  secondary: "bg-secondary text-white border-foreground",
+  default: "bg-white/10 text-[#111111] border-[#111111]/10",
+  primary: "bg-[#A3E635] text-[#111111] border-transparent",
+  success: "bg-[#A3E635] text-[#111111] border-transparent",
+  warning: "bg-amber-400 text-[#111111] border-transparent",
+  danger: "bg-red-500 text-white border-transparent",
+  outline: "bg-transparent text-[#111111]/60 border-[#111111]/10",
+  secondary: "bg-[#8B5CF6] text-white border-transparent",
 };
 
 export default function Badge({
@@ -24,7 +24,7 @@ export default function Badge({
   return (
     <span
       className={cn(
-        "inline-flex items-center gap-1.5 px-3 py-1 text-[11px] font-bold uppercase tracking-wider rounded-full border-2",
+        "inline-flex items-center gap-1.5 px-3 py-1 text-[10px] font-black uppercase tracking-widest rounded-full border",
         variants[variant],
         className
       )}

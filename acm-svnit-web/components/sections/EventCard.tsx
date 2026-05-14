@@ -2,46 +2,52 @@
 
 import { motion } from "framer-motion";
 import Link from "next/link";
-import { Calendar, ArrowRight } from "lucide-react";
-import Badge from "@/components/ui/Badge";
+import { ArrowUpRight, Asterisk, Calendar } from "lucide-react";
 import { events } from "@/data/events";
-import { formatDate, getEventStatus } from "@/lib/utils";
+import { formatDate, getEventStatus, cn } from "@/lib/utils";
 import type { Event } from "@/types";
 
-function EventTeaser({ event }: { event: Event }) {
+function EventTeaser({ event, index }: { event: Event; index: number }) {
   const status = getEventStatus(event.date);
 
   return (
-    <div className="card-surface p-5 flex flex-col h-full">
-      {/* Status + Category */}
-      <div className="flex items-center gap-2 mb-3">
-        {status === "live" && (
-          <Badge variant="danger">
-            <span className="pulse-dot" />
-            Live Now
-          </Badge>
-        )}
-        {status === "upcoming" && <Badge variant="success">Upcoming</Badge>}
-        {status === "past" && <Badge variant="default">Past</Badge>}
-        <Badge variant="outline">{event.category}</Badge>
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.5, delay: index * 0.1 }}
+      className="group relative bg-white border border-[#111111]/5 rounded-[32px] p-8 overflow-hidden hover:shadow-2xl hover:shadow-[#111111]/5 transition-all duration-500"
+    >
+      <div className="flex justify-between items-start mb-6">
+        <span className={cn(
+          "px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-widest border",
+          status === "live" ? "bg-red-500 text-white border-red-500" : "bg-[#f5f0e8] text-[#111111]/40 border-transparent"
+        )}>
+          {status}
+        </span>
+        <Asterisk size={20} className="text-[#111111]/10 group-hover:text-[#A3E635] group-hover:rotate-45 transition-all duration-500" />
       </div>
 
-      {/* Title */}
-      <h3 className="text-lg font-bold text-foreground mb-2 line-clamp-1">
+      <h3 className="text-2xl font-black text-[#111111] tracking-tight mb-3 line-clamp-2 leading-none">
         {event.title}
       </h3>
 
-      {/* Date */}
-      <div className="flex items-center gap-1.5 text-xs font-semibold text-muted mb-3 uppercase tracking-wide">
+      <div className="flex items-center gap-2 text-[10px] font-black text-[#111111]/40 uppercase tracking-widest mb-6">
         <Calendar size={12} />
         {formatDate(event.date)}
       </div>
 
-      {/* Description */}
-      <p className="text-sm text-muted leading-relaxed line-clamp-2 flex-1">
+      <p className="text-sm font-medium text-[#111111]/50 leading-relaxed mb-8 line-clamp-2">
         {event.description}
       </p>
-    </div>
+
+      <Link 
+        href={`/events`}
+        className="inline-flex items-center gap-2 text-[10px] font-black text-[#111111] uppercase tracking-widest group-hover:text-[#A3E635] transition-colors"
+      >
+        View Experience <ArrowUpRight size={14} />
+      </Link>
+    </motion.div>
   );
 }
 
@@ -51,47 +57,32 @@ export default function RecentEvents() {
     .slice(0, 3);
 
   return (
-    <motion.section
-      initial={{ opacity: 0, y: 20 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-      transition={{ duration: 0.5 }}
-      className="py-20 sm:py-24"
-    >
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        {/* Header */}
-        <div className="flex items-end justify-between mb-10">
-          <div>
-            <span className="pill-badge pill-badge--primary mb-4 inline-flex">Recent Events</span>
-            <h2 className="font-serif text-5xl sm:text-6xl text-foreground italic">
-              What&apos;s Happening
+    <section className="py-32 bg-[#f5f0e8] relative overflow-hidden">
+      <div className="mx-auto max-w-7xl px-4 sm:px-8 lg:px-16">
+        
+        <div className="flex flex-col md:flex-row justify-between items-end gap-12 mb-16">
+          <div className="max-w-xl">
+            <span className="text-[10px] font-black uppercase tracking-[0.3em] text-[#111111]/40 block mb-6">Latest Updates</span>
+            <h2 className="text-5xl md:text-7xl font-black text-[#111111] tracking-tighter leading-[0.9]">
+              What&apos;s <br/> Happening.
             </h2>
           </div>
           <Link
             href="/events"
-            className="hidden sm:inline-flex items-center gap-1.5 text-sm font-bold text-foreground hover:gap-2.5 transition-all uppercase tracking-wide"
+            className="group flex items-center gap-3 px-8 py-4 rounded-full bg-[#111111] text-white text-[10px] font-black uppercase tracking-widest hover:bg-[#A3E635] hover:text-[#111111] transition-all duration-300"
           >
-            View All <ArrowRight size={14} />
+            View All Events
+            <ArrowUpRight size={16} className="transition-transform group-hover:translate-x-1 group-hover:-translate-y-1" />
           </Link>
         </div>
 
-        {/* Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-          {recentEvents.map((event) => (
-            <EventTeaser key={event.id} event={event} />
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          {recentEvents.map((event, index) => (
+            <EventTeaser key={event.id} event={event} index={index} />
           ))}
         </div>
 
-        {/* Mobile link */}
-        <div className="sm:hidden mt-6 text-center">
-          <Link
-            href="/events"
-            className="inline-flex items-center gap-1.5 text-sm font-bold text-foreground uppercase tracking-wide"
-          >
-            View All Events <ArrowRight size={14} />
-          </Link>
-        </div>
       </div>
-    </motion.section>
+    </section>
   );
 }

@@ -13,22 +13,27 @@ import {
   ChevronDown,
   ChevronUp,
   Layers,
+  Terminal,
+  Cpu,
+  Asterisk,
+  ArrowUpRight
 } from "lucide-react";
 import { domains } from "@/data/domains";
 import { teamMembers } from "@/data/team";
-import Badge from "@/components/ui/Badge";
-import type { Domain } from "@/types";
+import { cn, stringToColor } from "@/lib/utils";
 
-const iconMap: Record<string, React.ComponentType<{ size?: number; className?: string }>> = {
+const iconMap: Record<string, React.ComponentType<{ size?: number; className?: string; strokeWidth?: number }>> = {
   Globe,
   Brain,
   Code,
   Shield,
   Palette,
   GitBranch,
+  Terminal,
+  Cpu
 };
 
-function DomainCard({ domain }: { domain: Domain }) {
+function DomainCard({ domain, index }: { domain: any; index: number }) {
   const [expanded, setExpanded] = useState(false);
   const Icon = iconMap[domain.icon] || Globe;
 
@@ -42,127 +47,106 @@ function DomainCard({ domain }: { domain: Domain }) {
       initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
-      transition={{ duration: 0.5 }}
-      className="card-surface overflow-hidden"
-      style={{
-        borderColor: expanded ? domain.color : undefined,
-      }}
+      transition={{ duration: 0.6, delay: index * 0.1 }}
+      className={cn(
+        "group relative rounded-[40px] border transition-all duration-500 overflow-hidden",
+        expanded ? "bg-white border-[#111111]/10 shadow-2xl" : "bg-[#111111]/[0.03] border-transparent hover:bg-white hover:border-[#111111]/10 hover:shadow-xl"
+      )}
     >
-      {/* Main content */}
-      <div className="p-6">
-        <div className="flex items-start gap-4 mb-4">
-          {/* Icon */}
-          <div
-            className="w-14 h-14 rounded-xl flex items-center justify-center shrink-0 border-2 border-foreground"
-            style={{
-              backgroundColor: `${domain.color}20`,
-              color: domain.color,
-            }}
-          >
-            <Icon size={26} />
-          </div>
+      {/* Background Accent */}
+      <div 
+        className="absolute -top-24 -right-24 w-64 h-64 blur-[100px] opacity-0 group-hover:opacity-10 transition-opacity pointer-events-none"
+        style={{ backgroundColor: domain.color }}
+      />
 
-          {/* Title + count */}
-          <div className="flex-1">
-            <h3 className="text-xl font-black text-foreground">
-              {domain.name}
-            </h3>
-            <div className="flex items-center gap-2 mt-1">
-              <Badge variant="default">
-                <Users size={10} />
-                {domain.memberCount} members
-              </Badge>
-            </div>
+      <div className="p-8 md:p-10">
+        <div className="flex items-start justify-between mb-8">
+           <div
+            className="w-16 h-16 rounded-2xl flex items-center justify-center shrink-0 bg-[#111111] text-white group-hover:scale-110 transition-transform duration-500"
+            style={{ backgroundColor: expanded ? domain.color : "#111111", color: expanded && domain.color === "#ffffff" ? "#111111" : "white" }}
+          >
+            <Icon size={30} strokeWidth={1.5} />
+          </div>
+          <div className="text-right">
+             <span className="text-[10px] font-black text-[#111111]/20 uppercase tracking-[0.2em] block mb-1">Members</span>
+             <span className="text-xl font-black text-[#111111] tabular-nums">{domain.memberCount}</span>
           </div>
         </div>
 
-        {/* Description */}
-        <p className="text-sm text-muted leading-relaxed mb-4">
+        <h3 className="text-3xl font-black text-[#111111] tracking-tighter leading-none mb-4">
+          {domain.name}
+        </h3>
+        
+        <p className="text-sm md:text-base font-medium text-[#111111]/50 leading-relaxed mb-8 max-w-sm">
           {domain.description}
         </p>
 
-        {/* Recent Projects (first 3) */}
-        <div className="mb-4">
-          <h4 className="text-xs font-bold uppercase tracking-widest text-muted mb-2 flex items-center gap-1.5">
-            <Layers size={12} />
-            Recent Projects
-          </h4>
-          <ul className="space-y-1.5">
-            {domain.recentProjects.slice(0, 3).map((project, i) => (
-              <li key={i} className="text-sm text-muted flex items-start gap-2">
-                <span
-                  className="w-2 h-2 rounded-full mt-1.5 shrink-0 border border-foreground"
-                  style={{ backgroundColor: domain.color }}
-                />
-                {project}
-              </li>
-            ))}
-          </ul>
+        <div className="flex items-center justify-between">
+           <button
+            onClick={() => setExpanded(!expanded)}
+            className="flex items-center gap-2 text-[10px] font-black text-[#111111] uppercase tracking-widest hover:text-[#A3E635] transition-colors"
+          >
+            {expanded ? "Collapse Details" : "View Initiatives"}
+            {expanded ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
+          </button>
+          
+          <div className="flex -space-x-3">
+             {domainMembers.slice(0, 3).map((m, i) => (
+               <div 
+                key={m.id} 
+                className="w-8 h-8 rounded-full border-2 border-white flex items-center justify-center text-[10px] font-black text-white overflow-hidden shadow-sm"
+                style={{ backgroundColor: stringToColor(m.name) }}
+               >
+                 {m.name[0]}
+               </div>
+             ))}
+             {domainMembers.length > 3 && (
+               <div className="w-8 h-8 rounded-full border-2 border-white bg-[#f5f0e8] flex items-center justify-center text-[10px] font-black text-[#111111] shadow-sm">
+                 +{domainMembers.length - 3}
+               </div>
+             )}
+          </div>
         </div>
-
-        {/* Expand button */}
-        <button
-          onClick={() => setExpanded(!expanded)}
-          className="flex items-center gap-1.5 text-sm font-bold text-foreground hover:text-secondary transition-colors uppercase tracking-wide"
-        >
-          {expanded ? "Show Less" : "Show More"}
-          {expanded ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
-        </button>
       </div>
 
-      {/* Expanded content */}
       <AnimatePresence>
         {expanded && (
           <motion.div
             initial={{ height: 0, opacity: 0 }}
             animate={{ height: "auto", opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
-            transition={{ duration: 0.3 }}
-            className="overflow-hidden"
+            className="border-t border-[#111111]/5 bg-[#f5f0e8]/30"
           >
-            <div className="px-6 pb-6 border-t-2 border-foreground pt-4">
-              {/* All projects */}
-              {domain.recentProjects.length > 3 && (
-                <div className="mb-5">
-                  <h4 className="text-xs font-bold uppercase tracking-widest text-muted mb-2">
-                    All Projects
-                  </h4>
-                  <ul className="space-y-1.5">
-                    {domain.recentProjects.map((project, i) => (
-                      <li
-                        key={i}
-                        className="text-sm text-muted flex items-start gap-2"
-                      >
-                        <span
-                          className="w-2 h-2 rounded-full mt-1.5 shrink-0 border border-foreground"
-                          style={{ backgroundColor: domain.color }}
-                        />
-                        {project}
-                      </li>
-                    ))}
-                  </ul>
+            <div className="p-8 md:p-10 space-y-10">
+              {/* Projects */}
+              <div>
+                <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-[#111111]/30 mb-6 flex items-center gap-2">
+                  <Layers size={14} /> Recent Initiatives
+                </h4>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  {domain.recentProjects.map((project: string, i: number) => (
+                    <div key={i} className="flex items-start gap-3 p-4 rounded-2xl bg-white border border-[#111111]/5">
+                      <div className="w-1.5 h-1.5 rounded-full mt-2 bg-[#A3E635]" />
+                      <span className="text-sm font-bold text-[#111111]/70">{project}</span>
+                    </div>
+                  ))}
                 </div>
-              )}
+              </div>
 
-              {/* Domain team members */}
-              {domainMembers.length > 0 && (
-                <div>
-                  <h4 className="text-xs font-bold uppercase tracking-widest text-muted mb-3">
-                    2025 Team Members
-                  </h4>
-                  <div className="flex flex-wrap gap-2">
-                    {domainMembers.map((member) => (
-                      <div
-                        key={member.id}
-                        className="px-3 py-1.5 rounded-full border-2 border-foreground text-xs font-bold text-foreground bg-background"
-                      >
-                        {member.name}{" "}
-                        <span className="text-muted">· {member.role}</span>
-                      </div>
-                    ))}
-                  </div>
+              {/* Members Grid */}
+              <div>
+                <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-[#111111]/30 mb-6">Core Contributors</h4>
+                <div className="flex flex-wrap gap-2">
+                  {domainMembers.map((member) => (
+                    <div
+                      key={member.id}
+                      className="px-4 py-2 rounded-full border border-[#111111]/10 bg-white text-[11px] font-black text-[#111111] hover:border-[#A3E635] transition-colors"
+                    >
+                      {member.name} <span className="text-[#111111]/30 ml-2">{member.role}</span>
+                    </div>
+                  ))}
                 </div>
-              )}
+              </div>
             </div>
           </motion.div>
         )}
@@ -173,31 +157,61 @@ function DomainCard({ domain }: { domain: Domain }) {
 
 export default function DomainsPageContent() {
   return (
-    <div className="pt-24 pb-20">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+    <div className="bg-[#f5f0e8] min-h-screen pt-40 pb-20 selection:bg-[#111111] selection:text-white">
+      <div className="mx-auto max-w-7xl px-4 sm:px-8 lg:px-16">
+        
         {/* Header */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-          className="mb-14"
+          transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+          className="max-w-4xl mb-24"
         >
-          <span className="pill-badge pill-badge--secondary mb-4 inline-flex">Custom & Hosted Experiences</span>
-          <h1 className="font-serif text-6xl sm:text-7xl text-foreground italic mb-2">
-            What We Do
+          <div className="flex items-center gap-3 mb-8">
+            <span className="flex h-6 w-6 items-center justify-center rounded-full bg-[#111111] text-[#A3E635]">
+              <Asterisk size={14} className="animate-spin-slow" />
+            </span>
+            <span className="text-[10px] font-black uppercase tracking-[0.3em] text-[#111111]/40">Verticals</span>
+          </div>
+          <h1 className="text-6xl md:text-8xl lg:text-9xl font-black text-[#111111] tracking-tighter leading-[0.8] mb-10">
+            Specialized <br/> Domains.
           </h1>
-          <p className="text-muted text-lg max-w-2xl">
-            Six specialized domains where members build, learn, and innovate
-            together across the computing spectrum.
+          <p className="text-xl md:text-2xl font-medium text-[#111111]/60 leading-relaxed max-w-2xl">
+            Our collective is structured into six high-performance domains, each dedicated to mastering a specific vertical of the computing landscape.
           </p>
         </motion.div>
 
         {/* Domain Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-          {domains.map((domain) => (
-            <DomainCard key={domain.id} domain={domain} />
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          {domains.map((domain, index) => (
+            <DomainCard key={domain.id} domain={domain} index={index} />
           ))}
         </div>
+
+        {/* Bottom CTA */}
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="mt-32 p-12 md:p-20 rounded-[48px] bg-[#111111] text-white relative overflow-hidden flex flex-col md:flex-row items-center justify-between gap-12"
+        >
+          <div className="absolute top-0 right-0 p-12 opacity-10">
+            <Asterisk size={180} strokeWidth={1} className="animate-spin-slow" />
+          </div>
+          
+          <div className="relative z-10">
+            <h2 className="text-4xl md:text-6xl font-black tracking-tighter leading-none mb-6">Want to Join <br/> A Collective?</h2>
+            <p className="text-lg text-white/50 font-medium max-w-md">Applications open twice a year. Sharpen your craft and get ready for the next cohort.</p>
+          </div>
+
+          <div className="relative z-10">
+            <button className="group flex items-center gap-4 px-12 py-6 rounded-full bg-[#A3E635] text-[#111111] text-xs font-black uppercase tracking-widest hover:scale-105 active:scale-95 transition-all shadow-[0_20px_50px_rgba(163,230,53,0.3)]">
+              Register Interest
+              <ArrowUpRight size={18} className="transition-transform group-hover:translate-x-1 group-hover:-translate-y-1" />
+            </button>
+          </div>
+        </motion.div>
+
       </div>
     </div>
   );

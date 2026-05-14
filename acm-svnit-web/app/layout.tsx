@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist } from "next/font/google";
 import Navbar from "@/components/ui/Navbar";
 import Footer from "@/components/ui/Footer";
+import Loader from "@/components/ui/Loader";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -34,10 +35,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={`${geistSans.variable} h-full`}>
-      <body className="min-h-full flex flex-col antialiased">
-        <Navbar />
-        <main className="flex-1">{children}</main>
-        <Footer />
+      <body className="min-h-full flex flex-col antialiased bg-[#f5f0e8] text-[#111111] overflow-x-hidden">
+        <Loader>
+          <Navbar />
+          <main className="flex-1 relative z-0">{children}</main>
+          <Footer />
+        </Loader>
       </body>
     </html>
   );

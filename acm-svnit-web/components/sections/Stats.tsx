@@ -11,8 +11,8 @@ interface StatItem {
 
 const stats: StatItem[] = [
   { label: "Members", value: 850, suffix: "+" },
-  { label: "Years", value: 12, suffix: "" },
-  { label: "Events", value: 42, suffix: "" },
+  { label: "Legacy Years", value: 12, suffix: "" },
+  { label: "Experiences", value: 42, suffix: "" },
   { label: "Domains", value: 6, suffix: "" },
 ];
 
@@ -28,7 +28,7 @@ function useCountUp(target: number, duration: number, start: boolean) {
       if (!startTime) startTime = timestamp;
       const elapsed = timestamp - startTime;
       const progress = Math.min(elapsed / duration, 1);
-      const eased = 1 - Math.pow(1 - progress, 3);
+      const eased = 1 - Math.pow(1 - progress, 4); // Smoother quintic ease
       setCount(Math.floor(eased * target));
 
       if (progress < 1) {
@@ -43,10 +43,10 @@ function useCountUp(target: number, duration: number, start: boolean) {
   return count;
 }
 
-function StatCard({ stat }: { stat: StatItem }) {
+function StatCard({ stat, index }: { stat: StatItem; index: number }) {
   const ref = useRef<HTMLDivElement>(null);
   const [inView, setInView] = useState(false);
-  const count = useCountUp(stat.value, 1500, inView);
+  const count = useCountUp(stat.value, 2000, inView);
 
   const handleIntersect = useCallback((entries: IntersectionObserverEntry[]) => {
     if (entries[0].isIntersecting) {
@@ -56,7 +56,7 @@ function StatCard({ stat }: { stat: StatItem }) {
 
   useEffect(() => {
     const observer = new IntersectionObserver(handleIntersect, {
-      threshold: 0.5,
+      threshold: 0.2,
     });
     const current = ref.current;
     if (current) observer.observe(current);
@@ -66,12 +66,11 @@ function StatCard({ stat }: { stat: StatItem }) {
   }, [handleIntersect]);
 
   return (
-    <div ref={ref} className="text-center px-8 py-5">
-      <div className="text-4xl sm:text-5xl font-black text-foreground tabular-nums">
-        {count}
-        {stat.suffix}
+    <div ref={ref} className="flex flex-col items-center lg:items-start px-6 py-10 lg:py-16 first:pl-0 last:pr-0">
+      <div className="text-5xl sm:text-7xl font-black text-[#111111] tracking-tighter tabular-nums mb-3">
+        {count}{stat.suffix}
       </div>
-      <div className="text-sm font-semibold text-muted mt-1 uppercase tracking-wide">
+      <div className="text-[10px] font-black text-[#111111]/30 uppercase tracking-[0.2em]">
         {stat.label}
       </div>
     </div>
@@ -80,20 +79,16 @@ function StatCard({ stat }: { stat: StatItem }) {
 
 export default function Stats() {
   return (
-    <motion.section
-      initial={{ opacity: 0, y: 20 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-      transition={{ duration: 0.5 }}
-      className="relative py-12"
-    >
-      <div className="mx-auto max-w-4xl px-4">
-        <div className="card-surface flex flex-wrap items-center justify-center divide-x-2 divide-foreground">
-          {stats.map((stat) => (
-            <StatCard key={stat.label} stat={stat} />
+    <section className="bg-[#f5f0e8] py-20 overflow-hidden">
+      <div className="mx-auto max-w-7xl px-4 sm:px-8 lg:px-16">
+        <div className="w-full h-px bg-[#111111]/5 mb-10" />
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-12 divide-y lg:divide-y-0 lg:divide-x divide-[#111111]/5">
+          {stats.map((stat, index) => (
+            <StatCard key={stat.label} stat={stat} index={index} />
           ))}
         </div>
+        <div className="w-full h-px bg-[#111111]/5 mt-10" />
       </div>
-    </motion.section>
+    </section>
   );
 }
