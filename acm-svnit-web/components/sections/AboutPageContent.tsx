@@ -86,35 +86,83 @@ function Timeline() {
 function MissionVision() {
   return (
     <section className="py-32">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12">
         {/* Mission */}
         <motion.div 
-          initial={{ opacity: 0, x: -20 }}
-          whileInView={{ opacity: 1, x: 0 }}
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="relative group bg-[#111111] rounded-[40px] p-10 md:p-16 overflow-hidden"
+          whileHover={{ y: -10 }}
+          className="relative group bg-[#111111] rounded-[48px] p-10 md:p-16 overflow-hidden transition-all duration-700 shadow-2xl"
         >
-          <div className="absolute -top-24 -right-24 w-64 h-64 bg-[#A3E635]/10 blur-[80px] pointer-events-none" />
-          <Target size={40} className="text-[#A3E635] mb-8" strokeWidth={1.5} />
-          <h3 className="text-3xl md:text-4xl font-black text-white tracking-tighter mb-6">Our Mission</h3>
-          <p className="text-white/50 text-base md:text-lg font-medium leading-relaxed">
-            To foster a vibrant community of computing enthusiasts at SVNIT, bridging the gap between academic learning and real-world craftsmanship. We empower students to innovate through collaborative building.
-          </p>
+          {/* Internal Atmospheric Glow */}
+          <div className="absolute -top-24 -right-24 w-80 h-80 bg-[#A3E635]/15 blur-[100px] pointer-events-none transition-transform duration-700 group-hover:scale-125" />
+          
+          <div className="relative z-10">
+            <div className="flex items-center gap-6 mb-12">
+              <div className="w-16 h-16 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center text-[#A3E635] shadow-inner">
+                <Target size={32} strokeWidth={1.5} />
+              </div>
+              <div className="h-px flex-1 bg-white/10" />
+            </div>
+            
+            <h3 className="text-4xl md:text-5xl font-black text-white tracking-tighter mb-8 leading-none">
+              Our <span className="text-[#A3E635]">Mission.</span>
+            </h3>
+            
+            <p className="text-white/50 text-lg md:text-xl font-medium leading-relaxed max-w-md">
+              To foster a vibrant community of computing enthusiasts at SVNIT, bridging the gap between academic learning and real-world craftsmanship. We empower students to innovate through collaborative building.
+            </p>
+
+            <div className="mt-16 flex items-center gap-4">
+              <span className="text-[10px] font-black text-white/20 uppercase tracking-[0.4em]">Strategic Foundation</span>
+              <div className="w-2 h-2 rounded-full bg-[#A3E635] animate-pulse" />
+            </div>
+          </div>
+
+          {/* Card Ghost Text */}
+          <div className="absolute -bottom-10 -right-10 text-[10rem] font-black text-white/[0.02] select-none pointer-events-none tracking-tighter italic font-serif">
+            Msn
+          </div>
         </motion.div>
 
         {/* Vision */}
         <motion.div 
-          initial={{ opacity: 0, x: 20 }}
-          whileInView={{ opacity: 1, x: 0 }}
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="relative group bg-white border border-[#111111]/5 rounded-[40px] p-10 md:p-16 overflow-hidden shadow-2xl shadow-[#111111]/5"
+          whileHover={{ y: -10 }}
+          className="relative group bg-white border border-[#111111]/5 rounded-[48px] p-10 md:p-16 overflow-hidden transition-all duration-700 shadow-2xl shadow-black/5"
         >
-          <div className="absolute -bottom-24 -left-24 w-64 h-64 bg-[#8B5CF6]/5 blur-[80px] pointer-events-none" />
-          <Eye size={40} className="text-[#8B5CF6] mb-8" strokeWidth={1.5} />
-          <h3 className="text-3xl md:text-4xl font-black text-[#111111] tracking-tighter mb-6">Our Vision</h3>
-          <p className="text-[#111111]/50 text-base md:text-lg font-medium leading-relaxed">
-            To be recognized as a world-class launching pad for future tech leaders and innovators — where every student has access to high-end computing education and creative mentorship.
-          </p>
+          {/* Internal Atmospheric Glow */}
+          <div className="absolute -bottom-24 -left-24 w-80 h-80 bg-[#8B5CF6]/10 blur-[100px] pointer-events-none transition-transform duration-700 group-hover:scale-125" />
+          
+          <div className="relative z-10">
+            <div className="flex items-center gap-6 mb-12">
+              <div className="w-16 h-16 rounded-2xl bg-[#111111]/5 border border-[#111111]/5 flex items-center justify-center text-[#8B5CF6] shadow-inner">
+                <Eye size={32} strokeWidth={1.5} />
+              </div>
+              <div className="h-px flex-1 bg-[#111111]/10" />
+            </div>
+            
+            <h3 className="text-4xl md:text-5xl font-black text-[#111111] tracking-tighter mb-8 leading-none">
+              Our <span className="text-[#8B5CF6]">Vision.</span>
+            </h3>
+            
+            <p className="text-[#111111]/50 text-lg md:text-xl font-medium leading-relaxed max-w-md">
+              To be recognized as a world-class launching pad for future tech leaders and innovators — where every student has access to high-end computing education and creative mentorship.
+            </p>
+
+            <div className="mt-16 flex items-center gap-4">
+              <span className="text-[10px] font-black text-[#111111]/20 uppercase tracking-[0.4em]">Future Trajectory</span>
+              <div className="w-2 h-2 rounded-full bg-[#8B5CF6] animate-pulse" />
+            </div>
+          </div>
+
+          {/* Card Ghost Text */}
+          <div className="absolute -bottom-10 -right-10 text-[10rem] font-black text-black/[0.02] select-none pointer-events-none tracking-tighter italic font-serif">
+            Vsn
+          </div>
         </motion.div>
       </div>
     </section>
@@ -280,10 +328,73 @@ function ContactSection() {
   );
 }
 
+function RotatingRingSystem() {
+  return (
+    <div className="absolute top-0 left-0 w-full h-screen pointer-events-none overflow-hidden z-0">
+      <div className="absolute top-[30%] right-[-10%] md:right-[0%] translate-x-1/4 -translate-y-1/2">
+        {/* Large Outer Ring */}
+        <motion.div
+          animate={{ rotate: 360 }}
+          transition={{ duration: 100, repeat: Infinity, ease: "linear" }}
+          className="absolute w-[800px] md:w-[1200px] h-[800px] md:h-[1200px] rounded-full border-[0.5px] border-[#111111]/[0.05] -translate-x-1/2 -translate-y-1/2"
+        />
+        
+        {/* Middle Ring with Dash Pattern */}
+        <motion.div
+          animate={{ rotate: -360 }}
+          transition={{ duration: 80, repeat: Infinity, ease: "linear" }}
+          className="absolute w-[600px] md:w-[900px] h-[600px] md:h-[900px] rounded-full border-[1px] border-dashed border-[#111111]/[0.08] -translate-x-1/2 -translate-y-1/2"
+        />
+
+        {/* Inner Typographic Ring */}
+        <motion.div
+          animate={{ rotate: 360 }}
+          transition={{ duration: 120, repeat: Infinity, ease: "linear" }}
+          className="absolute w-[400px] md:w-[700px] h-[400px] md:h-[700px] -translate-x-1/2 -translate-y-1/2 flex items-center justify-center"
+        >
+          <svg viewBox="0 0 200 200" className="w-full h-full opacity-[0.06] overflow-visible">
+            <defs>
+              <path id="innerCirclePath" d="M 100, 100 m -75, 0 a 75,75 0 1,1 150,0 a 75,75 0 1,1 -150,0" />
+            </defs>
+            <text className="text-[5px] font-black uppercase tracking-[1.2em] fill-[#111111]">
+              <textPath xlinkHref="#innerCirclePath" startOffset="0%">
+                ACM SVNIT • COLLECTIVE • INNOVATION • EST. 2011 • CRAFTSMANSHIP • 
+              </textPath>
+            </text>
+          </svg>
+        </motion.div>
+
+        {/* Smallest Inner Accent Ring */}
+        <motion.div
+          animate={{ rotate: -360 }}
+          transition={{ duration: 40, repeat: Infinity, ease: "linear" }}
+          className="absolute w-[200px] md:w-[350px] h-[200px] md:h-[350px] rounded-full border-[2px] border-[#A3E635]/[0.15] -translate-x-1/2 -translate-y-1/2"
+        />
+
+        {/* Core Glow */}
+        <div className="absolute w-[300px] h-[300px] bg-[#A3E635]/[0.04] blur-[120px] rounded-full -translate-x-1/2 -translate-y-1/2" />
+        <div className="absolute w-[500px] h-[500px] bg-[#8B5CF6]/[0.03] blur-[150px] rounded-full -translate-x-1/2 -translate-y-1/2" />
+      </div>
+
+      {/* Decorative Orbital for bottom left */}
+      <div className="absolute bottom-[10%] left-[-5%] translate-y-1/2">
+         <motion.div
+            animate={{ rotate: 360 }}
+            transition={{ duration: 150, repeat: Infinity, ease: "linear" }}
+            className="w-[500px] h-[500px] rounded-full border-[0.5px] border-[#111111]/[0.03]"
+         />
+         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-4 h-4 rounded-full bg-[#A3E635]/[0.1] blur-sm" />
+      </div>
+    </div>
+  );
+}
+
 export default function AboutPageContent() {
   return (
-    <div className="bg-[#f5f0e8] min-h-screen pt-40 pb-20 selection:bg-[#111111] selection:text-white">
-      <div className="mx-auto max-w-7xl px-4 sm:px-8 lg:px-16">
+    <div className="bg-transparent min-h-screen pt-16 md:pt-24 pb-20 selection:bg-[#111111] selection:text-white relative overflow-hidden">
+      <RotatingRingSystem />
+      
+      <div className="mx-auto max-w-7xl px-4 sm:px-8 lg:px-16 relative z-10">
         
         {/* Header */}
         <motion.div

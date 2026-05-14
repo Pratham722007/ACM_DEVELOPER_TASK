@@ -41,31 +41,7 @@ function MagneticButton({ children, className, style, onClick }: any) {
   );
 }
 
-function AmbientGlow() {
-  const mouseX = useSpring(0, { stiffness: 100, damping: 30, mass: 1 });
-  const mouseY = useSpring(0, { stiffness: 100, damping: 30, mass: 1 });
 
-  useEffect(() => {
-    const moveGlow = (e: MouseEvent) => {
-      mouseX.set(e.clientX);
-      mouseY.set(e.clientY);
-    };
-    window.addEventListener("mousemove", moveGlow);
-    return () => window.removeEventListener("mousemove", moveGlow);
-  }, [mouseX, mouseY]);
-
-  return (
-    <motion.div
-      className="pointer-events-none fixed left-0 top-0 z-0 h-[600px] w-[600px] rounded-full bg-[#A3E635]/5 blur-[120px] mix-blend-multiply"
-      style={{
-        x: mouseX,
-        y: mouseY,
-        translateX: "-50%",
-        translateY: "-50%",
-      }}
-    />
-  );
-}
 
 // Ensure the scroll progress is calculated uniquely per card if needed, 
 // but since this is just a standard continuous row, CSS snap + Framer Motion whileInView on cards is sufficient.
@@ -110,20 +86,7 @@ export default function TeamPageContent() {
     if (scrollRef.current) scrollRef.current.scrollTo({ left: 0, behavior: 'smooth' });
   }, [selectedYear]);
 
-  useEffect(() => {
-    const container = scrollRef.current;
-    if (!container) return;
-    
-    const handleWheel = (e: WheelEvent) => {
-      if (Math.abs(e.deltaY) > Math.abs(e.deltaX)) {
-        e.preventDefault();
-        container.scrollBy({ left: e.deltaY, behavior: 'auto' });
-      }
-    };
-    
-    container.addEventListener('wheel', handleWheel, { passive: false });
-    return () => container.removeEventListener('wheel', handleWheel);
-  }, []);
+
 
   const scrollByAmount = (direction: 'left' | 'right') => {
     if (scrollRef.current) {
@@ -136,11 +99,7 @@ export default function TeamPageContent() {
   };
 
   return (
-    <div className="bg-[#f5f0e8] min-h-screen pt-32 pb-0 flex flex-col overflow-hidden relative selection:bg-[#111111] selection:text-white font-sans">
-      
-      {/* Background Atmosphere */}
-      <div className="absolute inset-0 pointer-events-none z-0 opacity-[0.05] mix-blend-multiply bg-[url('https://grainy-gradients.vercel.app/noise.svg')] repeat" />
-      <AmbientGlow />
+    <div className="bg-transparent min-h-screen pt-16 md:pt-24 pb-0 flex flex-col overflow-hidden relative selection:bg-[#111111] selection:text-white font-sans">
       
       {/* Top Asymmetrical Section */}
       <div className="px-4 sm:px-8 lg:px-16 w-full max-w-7xl mx-auto z-20 relative">
@@ -266,7 +225,7 @@ export default function TeamPageContent() {
         {/* Scroll Track */}
         <div
           ref={scrollRef}
-          className="flex gap-4 md:gap-6 overflow-x-auto snap-x snap-mandatory px-[10vw] xl:px-[15vw] scrollbar-none items-center w-full py-10 will-change-scroll"
+          className="flex gap-4 md:gap-6 overflow-hidden snap-x snap-mandatory px-[10vw] xl:px-[15vw] scrollbar-none items-center w-full py-10 will-change-scroll"
         >
           {filteredMembers.map((member, index) => (
             <div key={member.id} className="snap-center shrink-0 perspective-1000">

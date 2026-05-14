@@ -12,36 +12,29 @@ export default function Loader({ children }: LoaderProps) {
   const [phase, setPhase] = useState(0);
 
   useEffect(() => {
-    // Lock scroll immediately on mount
     document.body.style.overflow = "hidden";
 
-    // Sequence timing
-    const t1 = setTimeout(() => setPhase(1), 100);  // "FOR THE CURIOUS"
-    const t2 = setTimeout(() => setPhase(2), 1600); // "HACK. CREATE. COMPETE."
-    const t3 = setTimeout(() => setPhase(3), 3200); // "MORE THAN A CLUB — A COLLECTIVE"
-    const t4 = setTimeout(() => setPhase(4), 4800); // "ENTER THE COLLECTIVE"
-    const t5 = setTimeout(() => setPhase(5), 6400); // Fade out text
-    const t6 = setTimeout(() => setPhase(6), 6800); // Open doors & reveal site
-    const t7 = setTimeout(() => {
+    // Cinematic pacing — longer holds, intentional breathing room
+    const t0 = setTimeout(() => setPhase(1), 300);   // Ambient wake-up
+    const t1 = setTimeout(() => setPhase(2), 2200);  // "FOR THE BUILDERS."
+    const t2 = setTimeout(() => setPhase(3), 4200);  // "FOR THE COLLECTIVE."
+    const t3 = setTimeout(() => setPhase(4), 6200);  // "ACM SVNIT" hero reveal
+    const t4 = setTimeout(() => setPhase(5), 8400);  // Light spill + door trigger
+    const t5 = setTimeout(() => setPhase(6), 9000);  // Doors open
+    const t6 = setTimeout(() => {
       setIsLoaderActive(false);
-      document.body.style.overflow = ""; // Unlock scroll
-    }, 8500); // Sequence complete
+      document.body.style.overflow = "";
+    }, 11000);
 
     return () => {
-      clearTimeout(t1);
-      clearTimeout(t2);
-      clearTimeout(t3);
-      clearTimeout(t4);
-      clearTimeout(t5);
-      clearTimeout(t6);
-      clearTimeout(t7);
+      [t0, t1, t2, t3, t4, t5, t6].forEach(clearTimeout);
       document.body.style.overflow = "";
     };
   }, []);
 
-  // Premium easing curves
-  const easeLux = [0.22, 1, 0.36, 1] as const;
-  const easeInOut = [0.65, 0, 0.35, 1] as const;
+  // Cinematic easing — weighted, physical, elegant
+  const easeCinematic = [0.22, 1, 0.36, 1] as const;
+  const easeHeavy = [0.16, 1, 0.3, 1] as const;
 
   return (
     <>
@@ -51,147 +44,222 @@ export default function Loader({ children }: LoaderProps) {
             key="loader-container"
             className="fixed inset-0 z-[100] flex pointer-events-none"
           >
-            {/* Left Door - Matte Black */}
+            {/* ─── LEFT DOOR ─── */}
             <motion.div
-              initial={{ x: 0 }}
-              animate={phase >= 6 ? { x: "-100%" } : { x: 0 }}
-              transition={{ duration: 1.8, ease: easeLux }}
-              className="relative w-1/2 h-full bg-[#111111] shadow-[10px_0_50px_rgba(0,0,0,0.5)] z-10 overflow-hidden"
+              initial={{ x: "0%" }}
+              animate={phase >= 6 ? { x: "-100%" } : { x: "0%" }}
+              transition={{ duration: 2.2, ease: easeHeavy }}
+              className="relative w-1/2 h-full bg-[#0a0a0a] z-10 overflow-hidden"
             >
-               {/* Noise Overlay */}
-               <div className="absolute inset-0 opacity-[0.05] mix-blend-overlay" style={{ backgroundImage: "url('/noise.png')", backgroundSize: "100px" }} />
-            </motion.div>
-
-            {/* Right Door - Cream */}
-            <motion.div
-              initial={{ x: 0 }}
-              animate={phase >= 6 ? { x: "100%" } : { x: 0 }}
-              transition={{ duration: 1.8, ease: easeLux }}
-              className="relative w-1/2 h-full bg-[#f5f0e8] shadow-[-10px_0_50px_rgba(0,0,0,0.1)] z-10 overflow-hidden"
-            >
-               {/* Noise Overlay */}
-               <div className="absolute inset-0 opacity-[0.03] mix-blend-multiply" style={{ backgroundImage: "url('/noise.png')", backgroundSize: "100px" }} />
-            </motion.div>
-
-            {/* Central Typography & Light Glow */}
-            <div className="absolute inset-0 z-20 flex items-center justify-center">
-              
-              {/* Center Glow right before opening */}
-              <motion.div 
-                initial={{ opacity: 0, scale: 0.5 }}
-                animate={
-                  phase === 5 ? { opacity: 1, scale: 1 } : 
-                  phase >= 6 ? { opacity: 0, scale: 2, filter: "blur(20px)" } : 
-                  { opacity: 0, scale: 0.5 }
-                }
-                transition={{ duration: 1.2, ease: easeInOut }}
-                className="absolute w-[2px] h-screen bg-[#A3E635] shadow-[0_0_80px_20px_#A3E635]"
+              {/* Subtle noise texture */}
+              <div
+                className="absolute inset-0 opacity-[0.04] mix-blend-overlay"
+                style={{ backgroundImage: "url('https://grainy-gradients.vercel.app/noise.svg')", backgroundSize: "200px" }}
               />
+              {/* Faint architectural grid on left door */}
+              <div className="absolute inset-0 opacity-[0.03] bg-[linear-gradient(to_right,#ffffff_1px,transparent_1px),linear-gradient(to_bottom,#ffffff_1px,transparent_1px)] bg-[size:80px_80px]" />
+            </motion.div>
 
-              <div className="relative flex flex-col items-center justify-center text-[#111111] w-full h-full">
+            {/* ─── RIGHT DOOR ─── */}
+            <motion.div
+              initial={{ x: "0%" }}
+              animate={phase >= 6 ? { x: "100%" } : { x: "0%" }}
+              transition={{ duration: 2.2, ease: easeHeavy }}
+              className="relative w-1/2 h-full bg-[#0a0a0a] z-10 overflow-hidden"
+            >
+              {/* Subtle noise texture */}
+              <div
+                className="absolute inset-0 opacity-[0.04] mix-blend-overlay"
+                style={{ backgroundImage: "url('https://grainy-gradients.vercel.app/noise.svg')", backgroundSize: "200px" }}
+              />
+              {/* Faint architectural grid on right door */}
+              <div className="absolute inset-0 opacity-[0.03] bg-[linear-gradient(to_right,#ffffff_1px,transparent_1px),linear-gradient(to_bottom,#ffffff_1px,transparent_1px)] bg-[size:80px_80px]" />
+            </motion.div>
+
+            {/* ─── CENTER SEAM LINE ─── */}
+            <motion.div
+              initial={{ opacity: 0.1, scaleY: 0 }}
+              animate={
+                phase >= 5
+                  ? { opacity: 1, scaleY: 1, boxShadow: "0 0 120px 30px rgba(163,230,53,0.3)" }
+                  : phase >= 1
+                    ? { opacity: 0.3, scaleY: 1 }
+                    : { opacity: 0, scaleY: 0 }
+              }
+              transition={{ duration: phase >= 5 ? 0.8 : 2, ease: easeCinematic }}
+              className="absolute left-1/2 top-0 -translate-x-1/2 w-[1px] h-full bg-white/20 z-20 origin-center"
+            />
+
+            {/* ─── AMBIENT BACKGROUND GLOW ─── */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={phase >= 1 ? { opacity: 1 } : { opacity: 0 }}
+              transition={{ duration: 3, ease: "easeOut" }}
+              className="absolute inset-0 z-0 pointer-events-none"
+            >
+              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-[#A3E635]/[0.03] blur-[150px] rounded-full" />
+              <div className="absolute top-[60%] left-[40%] w-[400px] h-[400px] bg-[#8B5CF6]/[0.02] blur-[120px] rounded-full" />
+            </motion.div>
+
+            {/* ─── LIGHT SPILL ON DOOR OPEN ─── */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={
+                phase >= 5
+                  ? { opacity: 1 }
+                  : { opacity: 0 }
+              }
+              transition={{ duration: 1.2, ease: easeCinematic }}
+              className="absolute inset-0 z-15 pointer-events-none"
+            >
+              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-[#A3E635]/[0.06] blur-[200px] rounded-full" />
+              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] h-[300px] bg-white/[0.05] blur-[80px] rounded-full" />
+            </motion.div>
+
+            {/* ─── CENTRAL TYPOGRAPHY ─── */}
+            <div className="absolute inset-0 z-30 flex items-center justify-center">
+              <div className="relative flex flex-col items-center justify-center w-full h-full">
                 <AnimatePresence mode="wait">
-                  
-                  {/* Phase 1: Small elegant typography */}
+
+                  {/* Phase 1: "FOR THE CURIOUS." — slow awakening */}
                   {phase === 1 && (
                     <motion.div
-                      key="text-1"
-                      initial={{ opacity: 0, y: 10 }}
+                      key="phrase-1"
+                      initial={{ opacity: 0, y: 8 }}
                       animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: -10 }}
-                      transition={{ duration: 0.8, ease: easeLux }}
-                      className="absolute text-xs md:text-sm font-black uppercase tracking-[0.4em] text-[#A3E635] drop-shadow-[0_0_10px_rgba(163,230,53,0.3)]"
+                      exit={{ opacity: 0, y: -6 }}
+                      transition={{ duration: 1.2, ease: easeCinematic }}
+                      className="absolute flex flex-col items-center gap-6"
                     >
-                      FOR THE CURIOUS.
+                      <span className="text-[10px] md:text-xs font-black uppercase tracking-[0.6em] text-white/30">
+                        FOR THE CURIOUS.
+                      </span>
                     </motion.div>
                   )}
 
-                  {/* Phase 2: Kinetic Text but calmer */}
+                  {/* Phase 2: "FOR THE BUILDERS." — slightly bolder */}
                   {phase === 2 && (
                     <motion.div
-                      key="text-2"
-                      initial={{ opacity: 0, y: 20 }}
+                      key="phrase-2"
+                      initial={{ opacity: 0, y: 8 }}
                       animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: -20 }}
-                      transition={{ duration: 0.8, ease: easeLux }}
-                      className="absolute text-4xl md:text-7xl font-black italic tracking-tighter leading-none text-[#A3E635] drop-shadow-[0_0_15px_rgba(163,230,53,0.4)]"
+                      exit={{ opacity: 0, y: -6 }}
+                      transition={{ duration: 1.2, ease: easeCinematic }}
+                      className="absolute flex flex-col items-center gap-6"
                     >
-                      HACK. CREATE. COMPETE.
+                      <span className="text-sm md:text-lg font-black uppercase tracking-[0.4em] text-white/50">
+                        FOR THE BUILDERS.
+                      </span>
                     </motion.div>
                   )}
 
-                  {/* Phase 3: Brand statement */}
+                  {/* Phase 3: "FOR THE COLLECTIVE." — full presence */}
                   {phase === 3 && (
                     <motion.div
-                      key="text-3"
-                      initial={{ opacity: 0, y: 20 }}
+                      key="phrase-3"
+                      initial={{ opacity: 0, y: 8 }}
                       animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: -20 }}
-                      transition={{ duration: 0.8, ease: easeLux }}
-                      className="absolute text-2xl md:text-4xl font-black uppercase tracking-tight text-[#111111] bg-[#f5f0e8] px-8 py-4 rounded-sm shadow-xl"
+                      exit={{ opacity: 0, y: -6 }}
+                      transition={{ duration: 1.2, ease: easeCinematic }}
+                      className="absolute flex flex-col items-center gap-6"
                     >
-                      MORE THAN A CLUB — A COLLECTIVE
+                      <span className="text-lg md:text-2xl font-black uppercase tracking-[0.3em] text-white/70">
+                        FOR THE COLLECTIVE.
+                      </span>
                     </motion.div>
                   )}
 
-                  {/* Phase 4: Massive editorial text */}
+                  {/* Phase 4: "ACM SVNIT" — Monumental hero reveal */}
                   {phase === 4 && (
                     <motion.div
-                      key="text-4"
-                      initial={{ opacity: 0, scale: 0.98 }}
+                      key="phrase-4"
+                      initial={{ opacity: 0, scale: 0.97 }}
                       animate={{ opacity: 1, scale: 1 }}
-                      exit={{ opacity: 0, scale: 1.05 }}
-                      transition={{ duration: 1.2, ease: easeLux }}
-                      className="absolute flex flex-col items-center w-full px-4"
+                      exit={{ opacity: 0, scale: 1.02 }}
+                      transition={{ duration: 1.4, ease: easeCinematic }}
+                      className="absolute flex flex-col items-center"
                     >
-                      <motion.div 
-                        initial={{ opacity: 0, y: -10 }}
+                      {/* Overline */}
+                      <motion.span
+                        initial={{ opacity: 0, y: -8 }}
                         animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.4, duration: 1 }}
-                        className="text-[10px] md:text-xs font-black uppercase tracking-[0.6em] text-[#8B5CF6] mb-8"
+                        transition={{ delay: 0.3, duration: 1, ease: easeCinematic }}
+                        className="text-[9px] md:text-[10px] font-black uppercase tracking-[0.8em] text-[#A3E635]/60 mb-8"
                       >
-                        ACM SVNIT — EST. 2011
-                      </motion.div>
+                        EST. 2011
+                      </motion.span>
 
-                      <motion.h1 
-                        initial={{ letterSpacing: "-0.02em" }}
-                        animate={{ letterSpacing: "0.05em" }}
-                        transition={{ duration: 2, ease: easeLux }}
-                        className="text-6xl md:text-9xl lg:text-[10rem] font-black tracking-tighter leading-none text-center text-[#A3E635] drop-shadow-[0_0_40px_rgba(163,230,53,0.4)]"
-                      >
-                        ENTER THE<br/>COLLECTIVE
-                      </motion.h1>
+                      {/* Main Title */}
+                      <h1 className="text-6xl md:text-8xl lg:text-9xl font-black tracking-tighter leading-[0.85] text-center text-white">
+                        ACM
+                        <br />
+                        <span className="text-[#A3E635]">SVNIT</span>
+                      </h1>
 
-                      <motion.div 
-                        initial={{ opacity: 0, y: 10 }}
+                      {/* Underline */}
+                      <motion.div
+                        initial={{ scaleX: 0 }}
+                        animate={{ scaleX: 1 }}
+                        transition={{ delay: 0.6, duration: 1.2, ease: easeCinematic }}
+                        className="w-24 h-[2px] bg-white/10 mt-10 origin-center"
+                      />
+
+                      {/* Tagline */}
+                      <motion.span
+                        initial={{ opacity: 0, y: 8 }}
                         animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.8, duration: 1 }}
-                        className="text-[10px] md:text-xs font-black uppercase tracking-[0.4em] text-[#A3E635] mt-12 flex items-center gap-6 bg-[#111111] px-10 py-4 rounded-full shadow-[0_0_40px_rgba(163,230,53,0.15)]"
+                        transition={{ delay: 0.9, duration: 1, ease: easeCinematic }}
+                        className="text-[9px] md:text-[10px] font-black uppercase tracking-[0.5em] text-white/20 mt-8"
                       >
-                        <span>WORKSHOPS</span>
-                        <span className="w-1.5 h-1.5 rounded-full bg-[#A3E635]" />
-                        <span>HACKATHONS</span>
-                        <span className="w-1.5 h-1.5 rounded-full bg-[#A3E635]" />
-                        <span>EVENTS</span>
-                      </motion.div>
+                        ENTER THE COLLECTIVE
+                      </motion.span>
                     </motion.div>
                   )}
-                  
+
                 </AnimatePresence>
               </div>
             </div>
+
+            {/* ─── EDITORIAL GHOST TYPOGRAPHY (behind doors) ─── */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={phase >= 1 ? { opacity: 1 } : { opacity: 0 }}
+              transition={{ duration: 3 }}
+              className="absolute inset-0 z-5 pointer-events-none select-none overflow-hidden"
+            >
+              <span className="absolute top-[20%] -left-10 text-[20rem] font-black text-white/[0.015] tracking-tighter leading-none">
+                ACM
+              </span>
+              <span className="absolute bottom-[15%] -right-20 text-[16rem] font-black text-white/[0.01] tracking-tighter leading-none -rotate-12">
+                CODE
+              </span>
+            </motion.div>
+
+            {/* ─── PROGRESS BAR ─── */}
+            <div className="absolute bottom-12 left-1/2 -translate-x-1/2 z-30 flex flex-col items-center gap-4">
+              <div className="w-32 h-[1px] bg-white/10 rounded-full overflow-hidden">
+                <motion.div
+                  initial={{ scaleX: 0 }}
+                  animate={{ scaleX: phase >= 5 ? 1 : phase / 5 }}
+                  transition={{ duration: 1.5, ease: easeCinematic }}
+                  className="h-full bg-white/30 origin-left"
+                />
+              </div>
+            </div>
+
           </motion.div>
         )}
       </AnimatePresence>
 
-      {/* Website Content Wrapper */}
+      {/* ─── WEBSITE CONTENT ─── */}
       <motion.div
-        initial={{ scale: 1.05, opacity: 0, filter: "blur(10px)" }}
+        initial={{ opacity: 0 }}
         animate={
-          phase >= 6 
-            ? { scale: 1, opacity: 1, filter: "blur(0px)" } 
-            : { scale: 1.05, opacity: 0, filter: "blur(10px)" }
+          phase >= 6
+            ? { opacity: 1 }
+            : { opacity: 0 }
         }
-        transition={{ duration: 1.4, ease: easeLux }}
+        transition={{ duration: 1.8, ease: easeCinematic, delay: 0.3 }}
         className="w-full min-h-screen"
       >
         {children}

@@ -9,9 +9,7 @@ const navLinks = [
   { label: "Home", href: "#hero", fontClass: "font-[family-name:var(--font-playfair)] italic font-bold tracking-wide capitalize" },
   { label: "Events", href: "#events", fontClass: "font-[family-name:var(--font-playfair)] italic font-bold tracking-wide capitalize" },
   { label: "Team", href: "#team", fontClass: "font-[family-name:var(--font-playfair)] italic font-bold tracking-wide capitalize" },
-  { label: "Domains", href: "#domains", fontClass: "font-[family-name:var(--font-playfair)] italic font-bold tracking-wide capitalize" },
   { label: "About", href: "#about", fontClass: "font-[family-name:var(--font-playfair)] italic font-bold tracking-wide capitalize" },
-  { label: "News", href: "#news", fontClass: "font-[family-name:var(--font-playfair)] italic font-bold tracking-wide capitalize" },
 ];
 
 /* ───────────────────────────────────────────────

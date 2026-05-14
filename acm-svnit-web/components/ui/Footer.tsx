@@ -49,7 +49,6 @@ const footerLinks = [
       { label: "Home", href: "/" },
       { label: "Events", href: "/events" },
       { label: "Team", href: "/team" },
-      { label: "Domains", href: "/domains" },
     ],
   },
   {

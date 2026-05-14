@@ -22,16 +22,6 @@ export type TeamMember = {
   github?: string;
 };
 
-export type Domain = {
-  id: string;
-  name: string;
-  icon: string;
-  description: string;
-  memberCount: number;
-  color: string;
-  recentProjects: string[];
-};
-
 export type Milestone = {
   year: number;
   title: string;

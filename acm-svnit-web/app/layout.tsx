@@ -4,6 +4,7 @@ import Navbar from "@/components/ui/Navbar";
 import Footer from "@/components/ui/Footer";
 import Loader from "@/components/ui/Loader";
 import SmoothScroll from "@/components/ui/SmoothScroll";
+import CinematicBackground from "@/components/ui/CinematicBackground";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -42,11 +43,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={`${geistSans.variable} ${playfair.variable} h-full`}>
-      <body className="min-h-full flex flex-col antialiased bg-[#f5f0e8] text-[#111111] overflow-x-hidden">
+      <body className="min-h-full flex flex-col antialiased text-[#111111] overflow-x-hidden selection:bg-[#111111] selection:text-white">
         <SmoothScroll>
           <Loader>
+            <CinematicBackground />
             <Navbar />
-            <main className="flex-1 relative z-0">{children}</main>
+            <main className="flex-1 relative z-10 bg-transparent">{children}</main>
             <Footer />
           </Loader>
         </SmoothScroll>

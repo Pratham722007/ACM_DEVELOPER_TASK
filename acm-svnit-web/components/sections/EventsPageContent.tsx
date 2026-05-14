@@ -7,6 +7,7 @@ import {
   LayoutGrid, Clock, RotateCcw, Braces, Zap, Trophy 
 } from "lucide-react";
 import { events } from "@/data/events";
+import Image from "next/image";
 import { getEventStatus, cn, formatDate } from "@/lib/utils";
 import type { Event, EventCategory } from "@/types";
 
@@ -30,11 +31,64 @@ const tabIcons = {
   competition: Trophy
 };
 
-const cardThemes = [
-  { bg: "#111111", text: "#ffffff", buttonBg: "#A3E635", buttonText: "#111111", glow: "rgba(163, 230, 53, 0.4)" },
-  { bg: "#ffffff", text: "#111111", buttonBg: "#8B5CF6", buttonText: "#ffffff", glow: "rgba(139, 92, 246, 0.3)" },
-  { bg: "#1A1A1A", text: "#A3E635", buttonBg: "#ffffff", buttonText: "#1A1A1A", glow: "rgba(255, 255, 255, 0.3)" },
-];
+// Personality Themes & Art Direction
+const personalityThemes: Record<string, any> = {
+  "echelon": {
+    glow: "rgba(139, 92, 246, 0.4)",
+    accent: "#8B5CF6",
+    overlay: "from-[#8B5CF6]/20 via-transparent to-[#111111]/95"
+  },
+  "codecraft": {
+    glow: "rgba(255, 255, 255, 0.2)",
+    accent: "#ffffff",
+    overlay: "from-white/10 via-white/40 to-white/95"
+  },
+  "dotslash-9": {
+    glow: "rgba(163, 230, 53, 0.6)",
+    accent: "#A3E635",
+    overlay: "from-[#A3E635]/20 via-transparent to-[#111111]/95"
+  },
+  "hour-of-ai": {
+    glow: "rgba(56, 189, 248, 0.4)",
+    accent: "#38BDF8",
+    overlay: "from-[#38BDF8]/10 via-transparent to-[#111111]/95"
+  },
+  "n8n-workshop": {
+    glow: "rgba(244, 63, 94, 0.4)",
+    accent: "#F43F5E",
+    overlay: "from-[#F43F5E]/10 via-transparent to-[#111111]/95"
+  },
+  "summer-challenge-2024": {
+    glow: "rgba(250, 204, 21, 0.6)",
+    accent: "#FACC15",
+    overlay: "from-orange-500/10 via-transparent to-[#111111]/95"
+  }
+};
+
+// Atmosphere personality helper
+function personalityAtmosphere(id: string, isLight: boolean) {
+  switch (id) {
+    case "hour-of-ai":
+      return (
+        <div className="absolute inset-0 pointer-events-none opacity-20 z-0">
+          <div className="absolute inset-0 bg-[radial-gradient(#38BDF8_1px,transparent_1px)] [background-size:32px_32px] [mask-image:radial-gradient(ellipse_50%_50%_at_50%_50%,#000_70%,transparent_100%)]" />
+        </div>
+      );
+    case "n8n-workshop":
+      return (
+        <div className="absolute inset-0 pointer-events-none opacity-10 z-0">
+          <div className="absolute top-0 left-0 w-full h-full bg-[linear-gradient(90deg,transparent_24%,rgba(244,63,94,0.3)_25%,rgba(244,63,94,0.3)_26%,transparent_27%,transparent_74%,rgba(244,63,94,0.3)_75%,rgba(244,63,94,0.3)_76%,transparent_77%)] [background-size:60px_60px]" />
+          <div className="absolute top-0 left-0 w-full h-full bg-[linear-gradient(0deg,transparent_24%,rgba(244,63,94,0.3)_25%,rgba(244,63,94,0.3)_26%,transparent_27%,transparent_74%,rgba(244,63,94,0.3)_75%,rgba(244,63,94,0.3)_76%,transparent_77%)] [background-size:60px_60px]" />
+        </div>
+      );
+    case "dotslash-9":
+      return (
+        <div className="absolute top-0 right-0 w-40 h-40 bg-[#A3E635]/10 pointer-events-none" />
+      );
+    default:
+      return null;
+  }
+}
 
 function MagneticButton({ children, className, style, onClick }: any) {
   const ref = useRef<HTMLButtonElement>(null);
@@ -134,31 +188,7 @@ function FilterPill({ tab, isActive, onClick }: any) {
   );
 }
 
-function AmbientGlow() {
-  const mouseX = useSpring(0, { stiffness: 100, damping: 30, mass: 1 });
-  const mouseY = useSpring(0, { stiffness: 100, damping: 30, mass: 1 });
 
-  useEffect(() => {
-    const moveGlow = (e: MouseEvent) => {
-      mouseX.set(e.clientX);
-      mouseY.set(e.clientY);
-    };
-    window.addEventListener("mousemove", moveGlow);
-    return () => window.removeEventListener("mousemove", moveGlow);
-  }, [mouseX, mouseY]);
-
-  return (
-    <motion.div
-      className="pointer-events-none fixed left-0 top-0 z-0 h-[600px] w-[600px] rounded-full bg-purple-500/10 blur-[120px] mix-blend-screen"
-      style={{
-        x: mouseX,
-        y: mouseY,
-        translateX: "-50%",
-        translateY: "-50%",
-      }}
-    />
-  );
-}
 
 function ContinuousOsmoCard({ event, index, scrollRef }: any) {
   const cardRef = useRef<HTMLDivElement>(null);
@@ -170,102 +200,201 @@ function ContinuousOsmoCard({ event, index, scrollRef }: any) {
   });
 
   const smoothProgress = useSpring(scrollXProgress, {
-    stiffness: 150,
-    damping: 25,
-    mass: 0.5
+    stiffness: 100,
+    damping: 30,
+    mass: 0.8
   });
 
-  const scale = useTransform(smoothProgress, [0, 0.35, 0.5, 0.65, 1], [0.84, 0.92, 1.08, 0.92, 0.84]);
-  const rotate = useTransform(smoothProgress, [0, 0.4, 0.5, 0.6, 1], [-8, -3, 0, 3, 8]);
-  const y = useTransform(smoothProgress, [0, 0.5, 1], [30, -10, 30]);
+  // Perspective Depth Transforms
+  const scale = useTransform(smoothProgress, [0, 0.4, 0.5, 0.6, 1], [0.85, 0.95, 1.12, 0.95, 0.85]);
+  const rotateY = useTransform(smoothProgress, [0, 0.4, 0.5, 0.6, 1], [25, 10, 0, -10, -25]);
+  const opacity = useTransform(smoothProgress, [0, 0.4, 0.5, 0.6, 1], [0.8, 0.9, 1, 0.9, 0.8]);
+  const y = useTransform(smoothProgress, [0, 0.5, 1], [20, 0, 20]);
   
-  const shadeOpacity = useTransform(smoothProgress, [0, 0.45, 0.5, 0.55, 1], [0.5, 0.15, 0, 0.15, 0.5]);
+  const shadowOpacity = useTransform(smoothProgress, [0, 0.5, 1], [0, 0.6, 0]);
   
-  const zIndexRaw = useTransform(smoothProgress, [0, 0.45, 0.5, 0.55, 1], [0, 10, 30, 10, 0]);
-  const zIndex = useTransform(zIndexRaw, Math.round);
-  
-  const shadowOpacity = useTransform(smoothProgress, [0, 0.5, 1], [0, 0.8, 0]);
-  const theme = cardThemes[index % cardThemes.length];
-  const boxShadow = useMotionTemplate`0 40px 80px -20px rgba(0,0,0,${shadowOpacity}), 0 0 0 1px rgba(255,255,255,0.05) inset, 0 0 80px -20px ${theme.glow} inset`;
+  const theme = personalityThemes[event.id] || {
+    glow: "rgba(163, 230, 53, 0.3)",
+    accent: "#A3E635",
+    overlay: "from-black/40 via-transparent to-black/95"
+  };
 
-  const shortDesc = event.description.length > 70 
-    ? event.description.slice(0, 70) + "..." 
-    : event.description;
+  const isLight = event.id === "codecraft";
+  const isHighlight = event.id === "dotslash-9";
+
+  const boxShadow = useMotionTemplate`0 50px 100px -20px rgba(0,0,0,${shadowOpacity}), 0 0 0 1px rgba(255,255,255,0.05) inset, 0 0 100px -20px ${theme.glow} inset`;
 
   return (
-    <div ref={cardRef} className="snap-center shrink-0 flex items-center justify-center py-20 px-2 w-[340px] md:w-[470px]">
+    <div ref={cardRef} className="snap-center shrink-0 flex items-center justify-center py-20 px-8 w-[340px] md:w-[500px]">
       <motion.div
         style={{
           scale,
-          rotateZ: rotate,
+          rotateY,
+          opacity,
           y,
-          zIndex,
-          transformPerspective: 1200,
+          transformPerspective: 1500,
+          backfaceVisibility: "hidden",
+          WebkitBackfaceVisibility: "hidden",
         }}
         className="w-full flex items-center justify-center will-change-transform"
       >
         <motion.div
-          className="relative w-[320px] md:w-[450px] h-[480px] md:h-[600px] rounded-[24px] p-6 md:p-10 flex flex-col items-center text-center overflow-hidden transition-colors"
-          style={{
-            backgroundColor: theme.bg,
-            color: theme.text,
-            boxShadow,
-          }}
-          whileHover={{ y: -5, scale: 1.02 }}
-          transition={{ type: "spring", stiffness: 300, damping: 20 }}
+          className={cn(
+            "relative w-[320px] md:w-[480px] h-[500px] md:h-[650px] rounded-[48px] p-8 md:p-12 flex flex-col items-center overflow-hidden transition-all duration-700 group shadow-2xl",
+            isLight ? "bg-white" : "bg-[#111111]"
+          )}
+          style={{ boxShadow }}
+          whileHover={{ y: -10, scale: 1.03 }}
         >
-          <motion.div 
-            className="absolute inset-0 bg-[#111111] pointer-events-none z-50 mix-blend-multiply"
-            style={{ opacity: shadeOpacity }}
-          />
+          {/* Background Image Layer */}
+          {event.image && (
+            <div className="absolute inset-0 z-0">
+              <Image 
+                src={event.image} 
+                alt={event.title}
+                fill
+                className={cn(
+                  "object-cover transition-transform duration-1000 group-hover:scale-110",
+                  isLight ? "opacity-30 grayscale contrast-125" : "opacity-60"
+                )}
+              />
+              {/* Art-Directed Multi-Stop Gradient Overlays */}
+              <div className={cn(
+                "absolute inset-0 bg-gradient-to-b",
+                theme.overlay
+              )} />
+              
+            </div>
+          )}
 
-          <div className="flex gap-2 mb-auto w-full justify-center">
-            <span className="text-[9px] font-black uppercase tracking-[0.2em] px-3 py-1 rounded-full border border-current/20 backdrop-blur-md bg-white/5">
-              {event.category}
-            </span>
-            <span className="text-[9px] font-black uppercase tracking-[0.2em] px-3 py-1 rounded-full border border-current/20 backdrop-blur-md bg-white/5">
-              {getEventStatus(event.date)}
-            </span>
-          </div>
-
-          <div className="flex flex-col items-center justify-center flex-1 w-full relative z-10 my-6">
-            <Asterisk size={48} strokeWidth={1} className="mb-6 opacity-60" />
-            
-            <h3 
-              className="text-4xl md:text-5xl font-black tracking-tighter leading-[1.05] mb-5 w-full"
-              style={{
-                display: '-webkit-box',
-                WebkitLineClamp: 3,
-                WebkitBoxOrient: 'vertical',
-                overflow: 'hidden'
-              }}
+          {/* Massive Editorial Background Ghost */}
+          <div className="absolute inset-0 z-10 flex items-center justify-center pointer-events-none select-none overflow-hidden">
+            <span 
+              className={cn(
+                "text-[12rem] md:text-[18rem] font-black tracking-tighter transition-all duration-700 opacity-[0.03] group-hover:opacity-[0.06] group-hover:scale-110",
+                isLight ? "text-black" : "text-white"
+              )}
             >
-              {event.title}
-            </h3>
-            
-            <p className="text-sm md:text-base font-medium opacity-80 px-4 leading-relaxed max-w-[95%]">
-              <span className="block font-bold mb-2 tracking-widest uppercase text-xs opacity-100">{formatDate(event.date)}</span>
-              {shortDesc}
-            </p>
+              {event.title.split(' ')[0]}
+            </span>
           </div>
 
-          <div className="w-full flex justify-center mt-auto relative z-10">
-            <MagneticButton
-              className="flex items-center gap-2 px-8 py-3.5 rounded-full font-bold text-xs uppercase tracking-widest transition-colors shadow-2xl hover:scale-105"
-              style={{ backgroundColor: theme.buttonBg, color: theme.buttonText }}
-            >
-              Discover <ArrowRight size={14} />
-            </MagneticButton>
+          {/* Card Content */}
+          <div className="relative z-20 flex flex-col h-full w-full">
+            
+            {/* Top Metadata Section */}
+            <div className="flex justify-between items-start mb-auto">
+              <div className="flex flex-col gap-1">
+                <span className={cn(
+                  "text-[10px] font-black uppercase tracking-[0.3em] px-4 py-1.5 rounded-full border",
+                  isLight ? "border-black/10 bg-black/5 text-black" : "border-white/10 bg-white/5 text-white"
+                )}>
+                  {event.category}
+                </span>
+              </div>
+              <div className="flex flex-col items-end gap-1">
+                <span className={cn(
+                  "text-[9px] font-black uppercase tracking-widest",
+                  isLight ? "text-black/40" : "text-white/40"
+                )}>
+                  {getEventStatus(event.date)}
+                </span>
+                <span className={cn(
+                  "text-[9px] font-black uppercase tracking-widest",
+                  isLight ? "text-black" : "text-white"
+                )}>
+                  {formatDate(event.date)}
+                </span>
+              </div>
+            </div>
+
+            {/* Main Branding / Typography Area */}
+            <div className="flex flex-col items-start justify-center flex-1 w-full my-8">
+              <div className="flex items-center gap-4 mb-8">
+                <div className={cn(
+                  "w-12 h-px transition-all duration-700 group-hover:w-20",
+                  isLight ? "bg-black" : "bg-white"
+                )} />
+                <Asterisk 
+                  size={24} 
+                  className={cn(
+                    "animate-spin-slow",
+                    isLight ? "text-black" : "text-white"
+                  )} 
+                />
+              </div>
+              
+              <h3 
+                className={cn(
+                  "text-5xl md:text-7xl font-black tracking-tighter leading-[0.85] mb-8 w-full transition-all duration-500",
+                  isLight ? "text-black" : "text-white",
+                  isHighlight && "italic"
+                )}
+              >
+                {event.title}
+              </h3>
+              
+              <p className={cn(
+                "text-sm md:text-base font-medium leading-relaxed max-w-[85%] transition-all duration-500",
+                isLight ? "text-black/60" : "text-white/60",
+                "group-hover:opacity-100"
+              )}>
+                {event.description.length > 120 
+                  ? event.description.slice(0, 120) + "..." 
+                  : event.description}
+              </p>
+            </div>
+
+            {/* Bottom Interaction Area */}
+            <div className="w-full flex items-center justify-between mt-auto pt-8 border-t border-white/10">
+               <div className="flex flex-col">
+                  <span className={cn(
+                    "text-[8px] font-black uppercase tracking-widest mb-1 opacity-40",
+                    isLight ? "text-black" : "text-white"
+                  )}>Venue</span>
+                  <span className={cn(
+                    "text-[10px] font-black uppercase tracking-widest",
+                    isLight ? "text-black" : "text-white"
+                  )}>{event.venue.split('—')[0]}</span>
+               </div>
+               
+               <MagneticButton
+                 className={cn(
+                   "flex items-center gap-4 px-10 py-5 rounded-full font-black text-[11px] uppercase tracking-[0.2em] transition-all shadow-2xl hover:scale-105 active:scale-95 overflow-hidden group/btn",
+                 )}
+                 style={{ 
+                   backgroundColor: isLight ? "#111111" : theme.accent, 
+                   color: isLight ? "#ffffff" : "#111111" 
+                 }}
+               >
+                 <span className="relative z-10">Discover</span>
+                 <ArrowRight size={16} strokeWidth={3} className="relative z-10 transition-transform group-hover/btn:translate-x-2" />
+               </MagneticButton>
+            </div>
           </div>
+
+          {/* Atmospheric Details */}
+          {personalityAtmosphere(event.id, isLight)}
+
         </motion.div>
       </motion.div>
     </div>
   );
 }
 
+
+
 export default function EventsPageContent() {
   const [activeTab, setActiveTab] = useState<FilterTab>("all");
   const scrollRef = useRef<HTMLDivElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ["start end", "end start"]
+  });
+
+  const backgroundY = useTransform(scrollYProgress, [0, 1], [0, -100]);
 
   const filteredEvents = useMemo(() => {
     let filtered = [...events];
@@ -279,60 +408,57 @@ export default function EventsPageContent() {
     return filtered.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
   }, [activeTab]);
 
-  useEffect(() => {
-    if (scrollRef.current) scrollRef.current.scrollTo({ left: 0, behavior: 'smooth' });
-  }, [activeTab]);
+  const isInitialMount = useRef(true);
 
   useEffect(() => {
-    const container = scrollRef.current;
-    if (!container) return;
-    
-    const handleWheel = (e: WheelEvent) => {
-      if (Math.abs(e.deltaY) > Math.abs(e.deltaX)) {
-        e.preventDefault();
-        container.scrollBy({ left: e.deltaY, behavior: 'auto' });
+    if (scrollRef.current) {
+      if (filteredEvents.length >= 3) {
+        const isMobile = window.innerWidth < 768;
+        const offset = isMobile ? 340 : 470;
+        scrollRef.current.scrollTo({ 
+          left: offset, 
+          behavior: isInitialMount.current ? 'auto' : 'smooth' 
+        });
+      } else {
+        scrollRef.current.scrollTo({ 
+          left: 0, 
+          behavior: isInitialMount.current ? 'auto' : 'smooth' 
+        });
       }
-    };
-    
-    container.addEventListener('wheel', handleWheel, { passive: false });
-    return () => container.removeEventListener('wheel', handleWheel);
-  }, []);
+      isInitialMount.current = false;
+    }
+  }, [activeTab, filteredEvents.length]);
 
   const scrollByAmount = (direction: 'left' | 'right') => {
     if (scrollRef.current) {
       const isMobile = window.innerWidth < 768;
-      const offset = isMobile ? 340 + 16 : 470 + 40; 
+      const offset = isMobile ? 340 : 470; 
       scrollRef.current.scrollBy({ left: direction === 'right' ? offset : -offset, behavior: 'smooth' });
     }
   };
 
   return (
-    <div className="bg-[#f5f0e8] pt-8 pb-0 flex flex-col overflow-hidden relative selection:bg-[#111111] selection:text-white font-sans">
-      
-      {/* Background Atmosphere */}
-      <div className="absolute inset-0 pointer-events-none z-0 opacity-[0.04] mix-blend-multiply bg-[url('https://grainy-gradients.vercel.app/noise.svg')] repeat" />
-      <AmbientGlow />
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-0 pointer-events-none select-none w-full text-center">
-        <h1 className="text-[12rem] md:text-[22rem] font-black text-[#111111] opacity-[0.03] blur-md italic tracking-tighter mix-blend-multiply">
-          EVENTS
-        </h1>
-      </div>
+    <div ref={containerRef} className="bg-transparent pt-8 pb-0 flex flex-col overflow-hidden relative selection:bg-[#111111] selection:text-white font-sans">
       
       {/* Header Section */}
       <div className="px-4 sm:px-8 lg:px-16 w-full max-w-7xl mx-auto z-20 relative pt-4">
-        <div className="mb-8 flex flex-col lg:flex-row lg:items-end justify-between gap-8">
+        <div className="mb-12 flex flex-col lg:flex-row lg:items-end justify-between gap-12">
           
           <div>
-            <span className="inline-flex px-4 py-1.5 rounded-full bg-[#111111] text-[#A3E635] text-[10px] font-black tracking-widest uppercase mb-4 shadow-sm">
-              Showcase
-            </span>
-            <h2 className="text-4xl md:text-6xl lg:text-7xl font-black text-[#111111] tracking-tight leading-none">
-              Discover the <br className="hidden md:block"/> Experiences.
+            <motion.span 
+              initial={{ opacity: 0, x: -10 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              className="inline-flex px-4 py-1.5 rounded-full bg-[#111111] text-[#A3E635] text-[10px] font-black tracking-[0.3em] uppercase mb-6 shadow-xl"
+            >
+              Exhibition
+            </motion.span>
+            <h2 className="text-5xl md:text-7xl lg:text-8xl font-black text-[#111111] tracking-tighter leading-[0.85]">
+              Curated <br className="hidden md:block"/> Experiences.
             </h2>
           </div>
 
           {/* Magnetic Filter Pills */}
-          <div className="flex flex-wrap gap-3 lg:justify-end max-w-3xl">
+          <div className="flex flex-wrap gap-3 lg:justify-end max-w-2xl bg-white/50 p-2 rounded-[32px] border border-black/5">
             {tabs.map((tab) => (
               <FilterPill 
                 key={tab.id} 
@@ -346,54 +472,40 @@ export default function EventsPageContent() {
       </div>
 
       {/* Continuous Interpolation Scroll Track */}
-      <div className="relative w-full flex-1 flex items-center mt-4 md:mt-10 mb-10 md:mb-20 z-20">
+      <div className="relative w-full flex-1 flex items-center mt-10 mb-10 md:mb-16 z-20">
         
-        {/* Minimal Scrolling Hint */}
-        <div className="absolute left-4 xl:left-8 top-1/2 -translate-y-1/2 z-10 hidden xl:flex flex-col items-center justify-center opacity-40 pointer-events-none">
-          <motion.div 
-            animate={{ y: [0, -8, 0] }}
-            transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-            className="mb-4"
-          >
-            <ArrowUp size={16} strokeWidth={1.5} className="text-[#111111]" />
-          </motion.div>
-          <span className="[writing-mode:vertical-rl] text-[9px] font-bold tracking-[0.4em] uppercase text-[#111111] rotate-180">
-            Scroll To Explore
-          </span>
-        </div>
-
-        {/* High-Visibility Floating Navigation Arrows */}
-        <div className="absolute top-1/2 left-2 sm:left-4 md:left-6 lg:left-12 -translate-y-1/2 z-[100] flex pointer-events-auto">
+        {/* Navigation Arrows - Premium Styling */}
+        <div className="absolute top-1/2 left-4 md:left-8 lg:left-12 -translate-y-1/2 z-[100] flex pointer-events-auto">
           <MagneticButton 
             onClick={() => scrollByAmount('left')}
-            className="w-12 h-12 md:w-16 md:h-16 rounded-full bg-[#111111]/80 backdrop-blur-md border border-white/10 shadow-[0_10px_30px_rgba(0,0,0,0.4)] text-white hover:border-[#A3E635]/60 hover:shadow-[0_0_30px_rgba(163,230,53,0.25)] hover:scale-105 transition-all group flex items-center justify-center cursor-pointer active:scale-95"
+            className="w-14 h-14 md:w-20 md:h-20 rounded-full bg-white/80 backdrop-blur-xl border border-black/10 shadow-[0_20px_50px_rgba(0,0,0,0.1)] text-[#111111] hover:bg-[#111111] hover:text-white transition-all group flex items-center justify-center cursor-pointer active:scale-90"
             aria-label="Scroll Left"
           >
-            <ArrowLeft size={24} strokeWidth={1.5} className="transition-transform group-hover:-translate-x-1" />
+            <ArrowLeft size={28} strokeWidth={1.5} className="transition-transform group-hover:-translate-x-1" />
           </MagneticButton>
         </div>
         
-        <div className="absolute top-1/2 right-2 sm:right-4 md:right-6 lg:right-12 -translate-y-1/2 z-[100] flex pointer-events-auto">
+        <div className="absolute top-1/2 right-4 md:right-8 lg:right-12 -translate-y-1/2 z-[100] flex pointer-events-auto">
           <MagneticButton 
             onClick={() => scrollByAmount('right')}
-            className="w-12 h-12 md:w-16 md:h-16 rounded-full bg-[#111111]/80 backdrop-blur-md border border-white/10 shadow-[0_10px_30px_rgba(0,0,0,0.4)] text-white hover:border-[#A3E635]/60 hover:shadow-[0_0_30px_rgba(163,230,53,0.25)] hover:scale-105 transition-all group flex items-center justify-center cursor-pointer active:scale-95"
+            className="w-14 h-14 md:w-20 md:h-20 rounded-full bg-white/80 backdrop-blur-xl border border-black/10 shadow-[0_20px_50px_rgba(0,0,0,0.1)] text-[#111111] hover:bg-[#111111] hover:text-white transition-all group flex items-center justify-center cursor-pointer active:scale-90"
             aria-label="Scroll Right"
           >
-            <ArrowRight size={24} strokeWidth={1.5} className="transition-transform group-hover:translate-x-1" />
+            <ArrowRight size={28} strokeWidth={1.5} className="transition-transform group-hover:translate-x-1" />
           </MagneticButton>
         </div>
 
         <div
           ref={scrollRef}
-          className="flex overflow-x-auto snap-x snap-mandatory px-[calc(50vw-170px)] md:px-[calc(50vw-235px)] scrollbar-none items-center h-[650px] md:h-[750px] w-full pt-10 pb-20 will-change-scroll"
+          className="flex overflow-hidden snap-x snap-mandatory px-[calc(50vw-170px)] md:px-[calc(50vw-235px)] scrollbar-none items-center h-[700px] md:h-[850px] w-full pt-10 pb-20 will-change-scroll perspective-[2000px]"
         >
           {filteredEvents.length > 0 ? (
             filteredEvents.map((event, index) => (
               <ContinuousOsmoCard key={event.id} event={event} index={index} scrollRef={scrollRef} />
             ))
           ) : (
-            <div className="w-full text-center text-[#111111]/40 font-bold tracking-widest uppercase text-sm mt-20">
-              No events found.
+            <div className="w-full text-center text-[#111111]/40 font-black tracking-[0.4em] uppercase text-xs mt-20">
+              No experiences found.
             </div>
           )}
         </div>

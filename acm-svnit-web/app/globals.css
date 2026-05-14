@@ -27,10 +27,11 @@
 
 html {
   scroll-behavior: smooth;
+  background: var(--color-background);
 }
 
 body {
-  background: var(--color-background);
+  background: transparent;
   color: var(--color-foreground);
   font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;

@@ -21,14 +21,8 @@ export default function Hero() {
   return (
     <section 
       ref={containerRef} 
-      className="relative min-h-[85vh] flex flex-col items-center justify-center pt-32 pb-4 overflow-hidden bg-[#f5f0e8]"
+      className="relative min-h-[85vh] flex flex-col items-center justify-center pt-32 pb-4 overflow-hidden bg-transparent"
     >
-      {/* Background Text Overlay - Subtle watermark */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full text-center pointer-events-none select-none z-0">
-        <h2 className="text-[20vw] font-black text-[#111111]/[0.02] tracking-tighter italic leading-none whitespace-nowrap">
-          ACM SVNIT COLLECTIVE
-        </h2>
-      </div>
 
       <div className="relative z-10 w-full max-w-[90rem] px-6 sm:px-10 lg:px-20">
         <div className="grid grid-cols-1 lg:grid-cols-[1.2fr_1fr] gap-12 lg:gap-24 items-center">
@@ -171,10 +165,7 @@ export default function Hero() {
                </p>
             </motion.div>
 
-            {/* Accent Glowing Blob */}
-            <div className="absolute -bottom-20 -right-20 w-80 h-80 bg-[#8B5CF6]/10 blur-[100px] rounded-full pointer-events-none" />
           </motion.div>
-
         </div>
       </div>
 
