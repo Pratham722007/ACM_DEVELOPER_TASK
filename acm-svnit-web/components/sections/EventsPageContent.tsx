@@ -358,18 +358,19 @@ function ContinuousOsmoCard({ event, index, scrollRef }: any) {
                   )}>{event.venue.split('—')[0]}</span>
                </div>
                
-               <MagneticButton
-                 className={cn(
-                   "flex items-center gap-4 px-10 py-5 rounded-full font-black text-[11px] uppercase tracking-[0.2em] transition-all shadow-2xl hover:scale-105 active:scale-95 overflow-hidden group/btn",
-                 )}
-                 style={{ 
-                   backgroundColor: isLight ? "#111111" : theme.accent, 
-                   color: isLight ? "#ffffff" : "#111111" 
-                 }}
-               >
-                 <span className="relative z-10">Discover</span>
-                 <ArrowRight size={16} strokeWidth={3} className="relative z-10 transition-transform group-hover/btn:translate-x-2" />
-               </MagneticButton>
+                <MagneticButton
+                  onClick={() => window.open(event.registrationLink, '_blank')}
+                  className={cn(
+                    "flex items-center gap-4 px-10 py-5 rounded-full font-black text-[11px] uppercase tracking-[0.2em] transition-all shadow-2xl hover:scale-105 active:scale-95 overflow-hidden group/btn",
+                  )}
+                  style={{ 
+                    backgroundColor: isLight ? "#111111" : theme.accent, 
+                    color: isLight ? "#ffffff" : "#111111" 
+                  }}
+                >
+                  <span className="relative z-10">Discover</span>
+                  <ArrowRight size={16} strokeWidth={3} className="relative z-10 transition-transform group-hover/btn:translate-x-2" />
+                </MagneticButton>
             </div>
           </div>
 

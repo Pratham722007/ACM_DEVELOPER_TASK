@@ -318,7 +318,7 @@ function ContactSection() {
               className="absolute inset-0 bg-[#A3E635] z-50 flex flex-col items-center justify-center text-center p-12"
             >
               <CheckCircle size={64} className="text-[#111111] mb-6" />
-              <h3 className="text-3xl font-black text-[#111111] tracking-tighter mb-4">Message Received.</h3>
+              <h3 className="text-3xl font-black text-[#111111] tracking-tighter mb-4">Message Submitted.</h3>
               <p className="text-[#111111]/70 font-medium max-w-xs mx-auto">We&apos;ll get back to you shortly. Stay curious.</p>
             </motion.div>
           )}

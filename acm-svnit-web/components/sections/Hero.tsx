@@ -87,7 +87,7 @@ export default function Hero() {
             >
               <div className="flex flex-wrap gap-4">
                 <Link 
-                  href="/events"
+                  href="#events"
                   className="group relative flex items-center gap-3 px-10 py-5 rounded-full bg-[#111111] text-white text-xs font-black uppercase tracking-[0.2em] overflow-hidden transition-all duration-300"
                 >
                   <div className="absolute inset-0 bg-[#A3E635] scale-x-0 group-hover:scale-x-100 origin-left transition-transform duration-500 ease-out" />
@@ -96,7 +96,7 @@ export default function Hero() {
                 </Link>
                 
                 <Link 
-                  href="/team"
+                  href="#team"
                   className="group flex items-center gap-3 px-10 py-5 rounded-full border border-[#111111]/10 text-[#111111] text-xs font-black uppercase tracking-[0.2em] hover:bg-[#111111] hover:text-white transition-all duration-300"
                 >
                   Meet The Collective

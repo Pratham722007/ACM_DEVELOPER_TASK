@@ -43,3 +43,4 @@ next-env.d.ts
 # ignored assets
 /public/teams/allteams/
 .gitignore
+.env.local

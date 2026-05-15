@@ -10,7 +10,7 @@ export const events: Event[] = [
     venue: "Online — ACM NIT Surat",
     category: "competition",
     image: "/static/events/echelon.jpeg",
-    registrationLink: "https://www.instagram.com/p/DJ4ap4RJum7/",
+    registrationLink: "https://www.instagram.com/p/DTP3SZqjNeo/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA==",
   },
   {
     id: "codecraft",
@@ -21,7 +21,7 @@ export const events: Event[] = [
     venue: "SVNIT Campus — MINDBEND",
     category: "competition",
     image: "/static/events/codecraft.jpeg",
-    registrationLink: "https://www.instagram.com/p/DHORtnrtGzp/",
+    registrationLink: "https://www.instagram.com/p/DUxazu6DYAC/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA==",
   },
   {
     id: "dotslash-9",
@@ -32,7 +32,7 @@ export const events: Event[] = [
     venue: "SVNIT Research Park, Surat",
     category: "hackathon",
     image: "/static/events/dotslash9.0.jpeg",
-    registrationLink: "https://www.instagram.com/p/DDhGU2yh1HT/",
+    registrationLink: "https://www.instagram.com/p/DU9vd1oCMwW/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA==",
   },
   {
     id: "hour-of-ai",
@@ -43,7 +43,7 @@ export const events: Event[] = [
     venue: "Schools across Surat & Vadodara",
     category: "workshop",
     image: "/static/events/hourofai.jpeg",
-    registrationLink: "https://www.instagram.com/p/DFUQiLKN2jT/?img_index=1",
+    registrationLink: "https://www.instagram.com/p/DTrz2pwDPrp/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA==",
   },
   {
     id: "2025-ideathon",
@@ -65,7 +65,7 @@ export const events: Event[] = [
     venue: "Old CSE Dept Classroom, SVNIT",
     category: "workshop",
     image: "/static/events/n8n.png",
-    registrationLink: "https://www.instagram.com/p/C_qAwTTtOTK/?img_index=1",
+    registrationLink: "https://www.instagram.com/p/DPabTGvCJh8/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA==",
   },
   {
     id: "summer-challenge-2024",
@@ -76,6 +76,6 @@ export const events: Event[] = [
     venue: "Online",
     category: "workshop",
     image: "/static/events/acmsummerchallenge.jpeg",
-    registrationLink: "https://www.instagram.com/p/C9AKiBKNQAu/",
+    registrationLink: "https://www.instagram.com/p/DNK1fbrMoeI/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA==",
   },
 ];
