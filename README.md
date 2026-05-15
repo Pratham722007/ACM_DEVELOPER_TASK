@@ -15,7 +15,7 @@
 
 ## 🌐 Live Demo
 
-> **Deployed Link:** _Coming soon — link will be added here._
+> **Deployed Link:** https://acmsvnit.vercel.app/
 
 ---
 
@@ -273,6 +273,6 @@ This project is the intellectual property of ACM Student Chapter, SVNIT Surat. A
 
 <div align="center">
 
-Built with ❤️ by the ACM SVNIT Development Team
+Built with ❤️ by Pratham Patadiya
 
 </div>
